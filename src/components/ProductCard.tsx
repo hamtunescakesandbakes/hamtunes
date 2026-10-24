@@ -3,9 +3,10 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { MessageCircle, Sparkles, ArrowRight, Eye } from "lucide-react";
+import { MessageCircle, Sparkles, ArrowRight, Eye, Tag } from "lucide-react";
 import { Product } from "@/lib/types";
-import { buildProductEnquiryLink } from "@/lib/whatsapp";
+import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { getProductDisplayPrice } from "@/lib/pricing";
 
 interface ProductCardProps {
   product: Product;
@@ -14,7 +15,17 @@ interface ProductCardProps {
 
 export default function ProductCard({ product, onQuickView }: ProductCardProps) {
   const [imageError, setImageError] = useState(false);
-  const whatsappUrl = buildProductEnquiryLink(product.name, product.category);
+
+  const displayPrice = product.price_display || getProductDisplayPrice(product);
+  const isCustomQuote =
+    !product.is_price_approved ||
+    product.pricing_method === "quote_only" ||
+    displayPrice.includes("Quote") ||
+    displayPrice.includes("Consultation");
+
+  // Custom prefilled WhatsApp message with pricing context
+  const whatsappMsg = `👋 Hello Hamtunes Cakes & Bakes!\n\nI was browsing your website and I'm interested in enquiring about:\n*${product.name}* (${product.category.replace(/_/g, " ")})\n${!isCustomQuote ? `*Pricing Reference:* ${displayPrice}\n` : ""}Please let me know availability and options for ordering. Thank you!`;
+  const whatsappUrl = buildWhatsAppLink(whatsappMsg);
 
   return (
     <div className="group bg-[#FFFFFF] rounded-2xl border border-[#E8DDD7] overflow-hidden hover:border-[#F50057]/40 hover:shadow-xl transition-all duration-300 flex flex-col h-full">
@@ -37,7 +48,7 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
               className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/90 text-[#351207] text-xs font-semibold hover:bg-white transition-colors"
             >
               <Eye className="w-3.5 h-3.5 text-[#F50057]" />
-              <span>Quick View</span>
+              <span>Quick View & Pricing</span>
             </button>
           )}
         </div>
@@ -58,13 +69,29 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
 
       {/* Product Content */}
       <div className="p-5 flex flex-col flex-grow justify-between space-y-4">
-        <div className="space-y-1.5">
-          <h3 className="font-serif font-bold text-lg text-[#351207] group-hover:text-[#F50057] transition-colors line-clamp-1">
-            {product.name}
-          </h3>
+        <div className="space-y-2">
+          <div className="flex items-start justify-between gap-2">
+            <h3 className="font-serif font-bold text-lg text-[#351207] group-hover:text-[#F50057] transition-colors line-clamp-1">
+              {product.name}
+            </h3>
+          </div>
+
           <p className="text-xs text-[#6F625C] line-clamp-2 leading-relaxed">
             {product.description}
           </p>
+
+          {/* Pricing Highlight Pill */}
+          <div className="pt-1 flex items-center justify-between">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-[#FFF9F5] border border-[#E8DDD7]">
+              <Tag className="w-3 h-3 text-[#F50057]" />
+              <span className={`text-xs font-bold ${isCustomQuote ? "text-[#6F625C]" : "text-[#351207]"}`}>
+                {displayPrice}
+              </span>
+            </div>
+            {product.is_price_approved && product.pricing_method === "starting_at" && (
+              <span className="text-[10px] text-[#6F625C] italic">Base size</span>
+            )}
+          </div>
         </div>
 
         {/* Action Controls */}
@@ -77,14 +104,14 @@ export default function ProductCard({ product, onQuickView }: ProductCardProps) 
             title={`Enquire about ${product.name} on WhatsApp`}
           >
             <MessageCircle className="w-3.5 h-3.5 fill-white text-[#F50057]" />
-            <span>Enquire on WhatsApp</span>
+            <span>{isCustomQuote ? "Request a Quote" : "Enquire / Order"}</span>
           </a>
 
           <Link
-            href={`/enquire?product=${encodeURIComponent(product.name)}&category=${encodeURIComponent(product.category)}`}
+            href={`/enquire?product=${encodeURIComponent(product.name)}&category=${encodeURIComponent(product.category)}&price=${encodeURIComponent(displayPrice)}`}
             className="inline-flex items-center justify-center p-2.5 rounded-xl border border-[#E8DDD7] text-[#351207] hover:bg-[#F7EFE8] hover:border-[#F50057] transition-colors"
-            title="Online Enquiry Form"
-            aria-label="Online Enquiry Form"
+            title="Custom Order Consultation Form"
+            aria-label="Custom Order Consultation Form"
           >
             <ArrowRight className="w-4 h-4 text-[#F50057]" />
           </Link>

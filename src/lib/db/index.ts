@@ -79,38 +79,99 @@ function saveDB(db: DatabaseSchema) {
   fs.renameSync(tempFile, DB_FILE);
 }
 
+import { getProductDisplayPrice, calculateRecommendedPrice } from "../pricing";
+
 /* ================= PRODUCTS ================= */
+/**
+ * Strips confidential production costs & target margins from products for public website consumption.
+ */
+export function sanitizeProductForPublic(product: Product): Product {
+  const { private_costs, ...safeProduct } = product;
+  return {
+    ...safeProduct,
+    price_display: getProductDisplayPrice(product),
+  };
+}
+
+/**
+ * Returns all products with private cost and margin metrics for authorized administrators.
+ */
+export function getAllAdminProducts(): Product[] {
+  const db = getDB();
+  return [...db.products]
+    .map((p) => ({
+      ...p,
+      price_display: getProductDisplayPrice(p),
+    }))
+    .sort((a, b) => a.order_rank - b.order_rank);
+}
+
+/**
+ * Returns sanitized published products for the public website and customer APIs.
+ */
 export function getAllProducts(): Product[] {
   const db = getDB();
-  return [...db.products].sort((a, b) => a.order_rank - b.order_rank);
+  return db.products
+    .filter((p) => p.is_published)
+    .map(sanitizeProductForPublic)
+    .sort((a, b) => a.order_rank - b.order_rank);
 }
 
 export function getPublishedProducts(): Product[] {
-  return getAllProducts().filter((p) => p.is_published);
+  return getAllProducts();
 }
 
 export function getProductById(id: string): Product | undefined {
+  const p = getDB().products.find((p) => p.id === id);
+  return p ? sanitizeProductForPublic(p) : undefined;
+}
+
+export function getAdminProductById(id: string): Product | undefined {
   return getDB().products.find((p) => p.id === id);
 }
 
 export function getProductBySlug(slug: string): Product | undefined {
-  return getDB().products.find((p) => p.slug === slug);
+  const p = getDB().products.find((p) => p.slug === slug);
+  return p ? sanitizeProductForPublic(p) : undefined;
 }
 
 export function saveProduct(product: Product): Product {
   const db = getDB();
+
+  // If private costs are provided, calculate recommended price
+  let privateCosts = product.private_costs;
+  if (privateCosts && privateCosts.unit_cost && privateCosts.target_gross_margin) {
+    const calc = calculateRecommendedPrice(
+      privateCosts.unit_cost,
+      privateCosts.target_gross_margin
+    );
+    privateCosts = {
+      ...privateCosts,
+      recommended_price: calc.recommendedPrice,
+    };
+  }
+
+  const updatedProduct: Product = {
+    ...product,
+    pricing_method: product.pricing_method || "starting_at",
+    currency: "NGN",
+    is_price_approved: Boolean(product.is_price_approved),
+    private_costs: privateCosts,
+    price_display: getProductDisplayPrice(product),
+    updated_at: new Date().toISOString(),
+  };
+
   const index = db.products.findIndex((p) => p.id === product.id);
   if (index >= 0) {
-    db.products[index] = { ...product, updated_at: new Date().toISOString() };
+    db.products[index] = updatedProduct;
   } else {
     db.products.push({
-      ...product,
+      ...updatedProduct,
       created_at: product.created_at || new Date().toISOString(),
-      updated_at: new Date().toISOString(),
     });
   }
   saveDB(db);
-  return product;
+  return updatedProduct;
 }
 
 export function deleteProduct(id: string): boolean {

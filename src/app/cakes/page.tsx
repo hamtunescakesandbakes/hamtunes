@@ -93,6 +93,22 @@ export default function CakesPage() {
               <span>Discuss Custom Design</span>
             </a>
           </div>
+
+          {/* Pricing Transparency Pill */}
+          <div className="pt-6 max-w-3xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-[#E8DDD7] text-xs text-[#6F625C] flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+              <div>
+                <span className="font-bold text-[#351207] block">Transparent Cake Pricing:</span>
+                Single-tier celebration cakes start from ₦35,000, personalized gifting cakes start from ₦13,000, and multi-tier / structural centerpieces are custom quoted based on your guest count and design.
+              </div>
+              <Link
+                href="/enquire?type=cake"
+                className="shrink-0 text-[#F50057] font-semibold hover:underline"
+              >
+                Get Custom Quote &rarr;
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 

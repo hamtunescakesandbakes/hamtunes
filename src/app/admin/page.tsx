@@ -23,9 +23,18 @@ import {
   Phone,
   MessageCircle,
   ExternalLink,
+  Tag,
+  Calculator,
+  Percent,
+  Plus,
+  Trash2,
+  CheckSquare,
+  DollarSign,
+  Info,
 } from "lucide-react";
-import { Product, Asset, Enquiry, SyncSettings } from "@/lib/types";
+import { Product, Asset, Enquiry, SyncSettings, PricingMethod, QuantityTier } from "@/lib/types";
 import { BRAND, CAKE_CATEGORIES, BAKES_CATEGORIES } from "@/lib/constants";
+import { formatNaira, calculateRecommendedPrice, CATEGORY_PRICING_GUIDELINES } from "@/lib/pricing";
 
 export default function AdminPage() {
   // Authentication state
@@ -35,7 +44,7 @@ export default function AdminPage() {
 
   // Dashboard Tabs
   const [activeTab, setActiveTab] = useState<
-    "overview" | "enquiries" | "images" | "products" | "sync" | "settings"
+    "overview" | "enquiries" | "images" | "products" | "pricing" | "sync" | "settings"
   >("overview");
 
   // Data states
@@ -54,9 +63,28 @@ export default function AdminPage() {
   const [imageDivisionFilter, setImageDivisionFilter] = useState("all");
   const [imageStatusFilter, setImageStatusFilter] = useState("all");
 
+  // Pricing Filters & Editing Modal
+  const [pricingFilterCategory, setPricingFilterCategory] = useState("all");
+  const [pricingFilterApproval, setPricingFilterApproval] = useState("all");
+  const [pricingSearch, setPricingSearch] = useState("");
+  const [editingPricingProduct, setEditingPricingProduct] = useState<Product | null>(null);
+
+  // Pricing Form State (in modal)
+  const [editMethod, setEditMethod] = useState<PricingMethod>("starting_at");
+  const [editBasePrice, setEditBasePrice] = useState<number | "">("");
+  const [editMaxPrice, setEditMaxPrice] = useState<number | "">("");
+  const [editUnitLabel, setEditUnitLabel] = useState<string>("piece");
+  const [editTiers, setEditTiers] = useState<QuantityTier[]>([]);
+  const [editPriceNotes, setEditPriceNotes] = useState<string>("");
+  const [editIsApproved, setEditIsApproved] = useState<boolean>(false);
+  // Private Cost & Margin inputs
+  const [editUnitCost, setEditUnitCost] = useState<number | "">("");
+  const [editTargetMargin, setEditTargetMargin] = useState<number>(0.50);
+  const [editCostNotes, setEditCostNotes] = useState<string>("");
+  const [savingPrice, setSavingPrice] = useState(false);
+
   // Editing modals/drawers
   const [selectedEnquiry, setSelectedEnquiry] = useState<Enquiry | null>(null);
-  const [editingAsset, setEditingAsset] = useState<Asset | null>(null);
 
   // Check existing session
   useEffect(() => {
@@ -92,7 +120,7 @@ export default function AdminPage() {
       const [enqRes, imgRes, prodRes, syncRes] = await Promise.all([
         fetch("/api/enquiries").then((r) => r.json()),
         fetch("/api/images").then((r) => r.json()),
-        fetch("/api/products").then((r) => r.json()),
+        fetch("/api/products?admin=true").then((r) => r.json()), // Fetch unmasked admin products
         fetch("/api/sync").then((r) => r.json()),
       ]);
 
@@ -203,6 +231,114 @@ export default function AdminPage() {
     }
   };
 
+  /* ================= PRICING MANAGEMENT HANDLERS ================= */
+  const openPricingModal = (product: Product) => {
+    setEditingPricingProduct(product);
+    setEditMethod(product.pricing_method || "starting_at");
+    setEditBasePrice(product.base_price !== undefined ? product.base_price : "");
+    setEditMaxPrice(product.max_price !== undefined ? product.max_price : "");
+    setEditUnitLabel(product.unit_label || (product.division === "cakes" ? "cake" : "piece"));
+    setEditTiers(product.quantity_tiers ? [...product.quantity_tiers] : []);
+    setEditPriceNotes(product.price_notes || "");
+    setEditIsApproved(Boolean(product.is_price_approved));
+
+    // Private Costs
+    setEditUnitCost(product.private_costs?.unit_cost !== undefined ? product.private_costs.unit_cost : "");
+    setEditTargetMargin(product.private_costs?.target_gross_margin !== undefined ? product.private_costs.target_gross_margin : 0.50);
+    setEditCostNotes(product.private_costs?.cost_notes || "");
+  };
+
+  const handleSaveProductPricing = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingPricingProduct) return;
+    setSavingPrice(true);
+
+    try {
+      const payload: Partial<Product> = {
+        pricing_method: editMethod,
+        currency: "NGN",
+        base_price: editBasePrice !== "" ? Number(editBasePrice) : undefined,
+        max_price: editMaxPrice !== "" ? Number(editMaxPrice) : undefined,
+        unit_label: editUnitLabel,
+        quantity_tiers: editTiers,
+        price_notes: editPriceNotes,
+        is_price_approved: editIsApproved,
+        private_costs: {
+          unit_cost: editUnitCost !== "" ? Number(editUnitCost) : undefined,
+          target_gross_margin: Number(editTargetMargin),
+          cost_notes: editCostNotes,
+        },
+      };
+
+      const res = await fetch(`/api/products/${editingPricingProduct.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+      if (data.success && data.product) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === editingPricingProduct.id ? data.product : p))
+        );
+        setEditingPricingProduct(null);
+      } else {
+        alert("Failed to save pricing: " + (data.error || "Unknown error"));
+      }
+    } catch (err: any) {
+      alert("Error saving pricing: " + err.message);
+    } finally {
+      setSavingPrice(false);
+    }
+  };
+
+  const handleQuickApprovePrice = async (product: Product) => {
+    try {
+      const res = await fetch(`/api/products/${product.id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ is_price_approved: true }),
+      });
+      const data = await res.json();
+      if (data.success && data.product) {
+        setProducts((prev) =>
+          prev.map((p) => (p.id === product.id ? data.product : p))
+        );
+      }
+    } catch (err) {
+      alert("Failed to approve price");
+    }
+  };
+
+  const handleBatchApproveAllPending = async () => {
+    const unapproved = products.filter((p) => !p.is_price_approved);
+    if (!confirm(`Are you sure you want to approve all ${unapproved.length} pending prices?`)) return;
+
+    for (const p of unapproved) {
+      await handleQuickApprovePrice(p);
+    }
+    alert("All pending prices have been approved and published to the live catalogue!");
+  };
+
+  const handleAddTier = () => {
+    setEditTiers([...editTiers, { quantity: 6, label: "Box of 6", price: 7000 }]);
+  };
+
+  const handleRemoveTier = (idx: number) => {
+    setEditTiers(editTiers.filter((_, i) => i !== idx));
+  };
+
+  const handleUpdateTier = (idx: number, field: keyof QuantityTier, val: any) => {
+    const updated = [...editTiers];
+    (updated[idx] as any)[field] = val;
+    setEditTiers(updated);
+  };
+
+  // Live Calculator computation
+  const liveCost = editUnitCost !== "" ? Number(editUnitCost) : 0;
+  const liveMargin = Number(editTargetMargin);
+  const liveCalc = calculateRecommendedPrice(liveCost, liveMargin);
+
   const exportEnquiriesCSV = () => {
     const headers = [
       "ID",
@@ -259,8 +395,27 @@ export default function AdminPage() {
     return matchesDivision && matchesStatus;
   });
 
+  const filteredPricingProducts = products.filter((p) => {
+    const matchesCategory =
+      pricingFilterCategory === "all" || p.category === pricingFilterCategory;
+    const matchesApproval =
+      pricingFilterApproval === "all"
+        ? true
+        : pricingFilterApproval === "approved"
+        ? p.is_price_approved
+        : pricingFilterApproval === "pending_approval"
+        ? !p.is_price_approved
+        : p.pricing_method === "quote_only";
+    const matchesSearch =
+      !pricingSearch ||
+      p.name.toLowerCase().includes(pricingSearch.toLowerCase()) ||
+      p.category.toLowerCase().includes(pricingSearch.toLowerCase());
+    return matchesCategory && matchesApproval && matchesSearch;
+  });
+
   const needsReviewAssets = assets.filter((a) => a.status === "needs_review");
   const newEnquiriesCount = enquiries.filter((e) => e.status === "new").length;
+  const pendingPricesCount = products.filter((p) => !p.is_price_approved).length;
 
   // 1. PIN LOGIN SCREEN
   if (!isAuthenticated) {
@@ -275,7 +430,7 @@ export default function AdminPage() {
               Hamtunes Management Portal
             </h1>
             <p className="text-xs text-[#6F625C]">
-              Enter the administrator access passcode to manage enquiries, photos, and website settings.
+              Enter the administrator access passcode to manage pricing, enquiries, photos, and website settings.
             </p>
           </div>
 
@@ -361,6 +516,11 @@ export default function AdminPage() {
             {[
               { id: "overview", label: "Overview", icon: LayoutDashboard },
               {
+                id: "pricing",
+                label: `Pricing & Margins ${pendingPricesCount > 0 ? `(${pendingPricesCount} Review)` : ""}`,
+                icon: Tag,
+              },
+              {
                 id: "enquiries",
                 label: `Enquiries ${newEnquiriesCount > 0 ? `(${newEnquiriesCount})` : ""}`,
                 icon: MessageSquare,
@@ -426,6 +586,15 @@ export default function AdminPage() {
                     </div>
                   </div>
 
+                  <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-amber-300 bg-amber-50/40 space-y-1">
+                    <span className="text-[11px] font-bold uppercase text-amber-800">
+                      Pending Price Approval
+                    </span>
+                    <div className="font-serif font-black text-2xl text-amber-700">
+                      {pendingPricesCount}
+                    </div>
+                  </div>
+
                   <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#E8DDD7] space-y-1">
                     <span className="text-[11px] font-bold uppercase text-[#6F625C]">
                       Published Products
@@ -444,15 +613,6 @@ export default function AdminPage() {
                     </div>
                   </div>
 
-                  <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-amber-300 bg-amber-50/50 space-y-1">
-                    <span className="text-[11px] font-bold uppercase text-amber-800">
-                      Awaiting Review
-                    </span>
-                    <div className="font-serif font-black text-2xl text-amber-700">
-                      {needsReviewAssets.length}
-                    </div>
-                  </div>
-
                   <div className="bg-[#FFFFFF] p-5 rounded-2xl border border-[#E8DDD7] space-y-1">
                     <span className="text-[11px] font-bold uppercase text-[#6F625C]">
                       Sync Engine
@@ -464,7 +624,34 @@ export default function AdminPage() {
                   </div>
                 </div>
 
-                {/* Quick Needs Review Queue */}
+                {/* Pending Price Approval Notice Callout */}
+                {pendingPricesCount > 0 && (
+                  <div className="bg-[#FFFFFF] rounded-2xl border-2 border-amber-300 p-6 space-y-3 shadow-xs">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                      <div className="flex items-start gap-3">
+                        <Tag className="w-6 h-6 text-amber-600 shrink-0 mt-0.5" />
+                        <div>
+                          <h3 className="font-serif font-bold text-lg text-[#351207]">
+                            {pendingPricesCount} Product Prices Awaiting Owner Review
+                          </h3>
+                          <p className="text-xs text-[#6F625C] leading-relaxed">
+                            Following the 16-year brand guideline, newly synced items have preliminary market benchmarks that are marked as <strong>Pending Owner Approval</strong>. While pending, the public website displays &ldquo;Custom Quote&rdquo; or &ldquo;Price on Consultation&rdquo; so customers never see unapproved prices.
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2 shrink-0">
+                        <button
+                          onClick={() => setActiveTab("pricing")}
+                          className="px-4 py-2 rounded-xl bg-[#F50057] hover:bg-[#D5004C] text-white text-xs font-bold shadow-sm"
+                        >
+                          Review & Set Prices
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Quick Needs Review Queue for Photos */}
                 {needsReviewAssets.length > 0 && (
                   <div className="bg-[#FFFFFF] rounded-2xl border border-amber-300 p-6 space-y-4">
                     <div className="flex items-center justify-between">
@@ -585,7 +772,560 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= 2. ENQUIRIES TAB ================= */}
+            {/* ================= 2. PRICING & MARGIN MANAGEMENT TAB ================= */}
+            {activeTab === "pricing" && (
+              <div className="space-y-6">
+                {/* Header & Controls */}
+                <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 bg-[#FFFFFF] p-5 rounded-2xl border border-[#E8DDD7]">
+                  <div className="space-y-1">
+                    <h2 className="font-serif font-black text-xl text-[#351207] flex items-center gap-2">
+                      <Tag className="w-5 h-5 text-[#F50057]" />
+                      <span>Product Pricing & Gross Margin System</span>
+                    </h2>
+                    <p className="text-xs text-[#6F625C]">
+                      Manage selling prices, define box tiers, calculate profit margins using{" "}
+                      <code className="text-[#351207] font-semibold bg-[#F7EFE8] px-1.5 py-0.5 rounded">
+                        Selling Price = Cost ÷ (1 − Target Margin)
+                      </code>
+                      , and approve prices for live display.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={handleBatchApproveAllPending}
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-green-700 hover:bg-green-800 text-white text-xs font-bold shadow-xs transition-colors"
+                    >
+                      <CheckSquare className="w-4 h-4" />
+                      <span>Approve All Pending ({pendingPricesCount})</span>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Filter Controls */}
+                <div className="flex flex-wrap items-center justify-between gap-3 bg-[#FFFFFF] p-4 rounded-2xl border border-[#E8DDD7]">
+                  <div className="flex flex-wrap items-center gap-3">
+                    <div className="relative w-64">
+                      <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#6F625C]" />
+                      <input
+                        type="text"
+                        placeholder="Search product pricing..."
+                        value={pricingSearch}
+                        onChange={(e) => setPricingSearch(e.target.value)}
+                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-[#E8DDD7] text-xs focus:outline-none focus:border-[#F50057]"
+                      />
+                    </div>
+
+                    <select
+                      value={pricingFilterApproval}
+                      onChange={(e) => setPricingFilterApproval(e.target.value)}
+                      className="px-3 py-2 rounded-xl border border-[#E8DDD7] text-xs bg-white"
+                    >
+                      <option value="all">All Approval States</option>
+                      <option value="pending_approval">Pending Owner Approval ({pendingPricesCount})</option>
+                      <option value="approved">Approved & Published ({products.length - pendingPricesCount})</option>
+                      <option value="quote_only">Custom Quote Only</option>
+                    </select>
+
+                    <select
+                      value={pricingFilterCategory}
+                      onChange={(e) => setPricingFilterCategory(e.target.value)}
+                      className="px-3 py-2 rounded-xl border border-[#E8DDD7] text-xs bg-white"
+                    >
+                      <option value="all">All Categories</option>
+                      {CAKE_CATEGORIES.filter((c) => c.id !== "all").map((c) => (
+                        <option key={c.id} value={c.id}>
+                          Cake: {c.label}
+                        </option>
+                      ))}
+                      {BAKES_CATEGORIES.filter((c) => c.id !== "all").map((c) => (
+                        <option key={c.id} value={c.id}>
+                          Bake: {c.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div className="text-xs text-[#6F625C]">
+                    Showing <span className="font-bold text-[#351207]">{filteredPricingProducts.length}</span> products
+                  </div>
+                </div>
+
+                {/* Pricing Table */}
+                <div className="bg-[#FFFFFF] rounded-2xl border border-[#E8DDD7] overflow-hidden shadow-xs">
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-left text-xs">
+                      <thead className="bg-[#F7EFE8] text-[#351207] uppercase text-[10px] font-bold tracking-wider border-b border-[#E8DDD7]">
+                        <tr>
+                          <th className="py-3 px-4">Product</th>
+                          <th className="py-3 px-4">Category</th>
+                          <th className="py-3 px-4">Pricing Method</th>
+                          <th className="py-3 px-4">Selling Price (₦)</th>
+                          <th className="py-3 px-4 text-neutral-500">
+                            Unit Cost (Private)
+                          </th>
+                          <th className="py-3 px-4 text-neutral-500">
+                            Target Margin
+                          </th>
+                          <th className="py-3 px-4">Approval Status</th>
+                          <th className="py-3 px-4 text-right">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#E8DDD7]">
+                        {filteredPricingProducts.map((prod) => {
+                          const unitCost = prod.private_costs?.unit_cost;
+                          const targetMargin = prod.private_costs?.target_gross_margin;
+                          return (
+                            <tr
+                              key={prod.id}
+                              className="hover:bg-[#FFF9F5] transition-colors cursor-pointer"
+                              onClick={() => openPricingModal(prod)}
+                            >
+                              <td className="py-3 px-4 flex items-center gap-3">
+                                <div className="relative w-10 h-10 rounded-lg overflow-hidden shrink-0 bg-[#F7EFE8] border border-[#E8DDD7]">
+                                  <Image
+                                    src={prod.primary_image_url}
+                                    alt={prod.name}
+                                    fill
+                                    className="object-cover"
+                                  />
+                                </div>
+                                <div>
+                                  <div className="font-bold text-[#351207]">{prod.name}</div>
+                                  <div className="text-[10px] text-[#6F625C]">{prod.division}</div>
+                                </div>
+                              </td>
+
+                              <td className="py-3 px-4 capitalize text-[#6F625C]">
+                                {prod.category.replace(/_/g, " ")}
+                              </td>
+
+                              <td className="py-3 px-4">
+                                <span className="px-2 py-0.5 rounded-md bg-[#F7EFE8] text-[#351207] font-mono text-[10px] capitalize">
+                                  {prod.pricing_method.replace(/_/g, " ")}
+                                </span>
+                              </td>
+
+                              <td className="py-3 px-4 font-bold text-[#351207]">
+                                {prod.price_display}
+                              </td>
+
+                              {/* Confidential Private Cost Columns */}
+                              <td className="py-3 px-4 font-mono text-neutral-600">
+                                {unitCost ? formatNaira(unitCost) : "—"}
+                              </td>
+
+                              <td className="py-3 px-4 font-mono text-neutral-600">
+                                {targetMargin ? `${Math.round(targetMargin * 100)}%` : "—"}
+                              </td>
+
+                              {/* Approval Status */}
+                              <td className="py-3 px-4">
+                                {prod.is_price_approved ? (
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-green-100 text-green-800">
+                                    <Check className="w-3 h-3" />
+                                    <span>Approved & Live</span>
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-amber-100 text-amber-800">
+                                    <Clock className="w-3 h-3" />
+                                    <span>Pending Owner Review</span>
+                                  </span>
+                                )}
+                              </td>
+
+                              <td className="py-3 px-4 text-right space-x-2" onClick={(e) => e.stopPropagation()}>
+                                {!prod.is_price_approved ? (
+                                  <button
+                                    onClick={() => handleQuickApprovePrice(prod)}
+                                    className="px-2.5 py-1 rounded-lg bg-green-700 hover:bg-green-800 text-white font-semibold text-[11px] shadow-xs"
+                                    title="Approve proposed price for live display"
+                                  >
+                                    Approve
+                                  </button>
+                                ) : (
+                                  <span className="text-[10px] text-green-700 font-semibold">Active</span>
+                                )}
+
+                                <button
+                                  onClick={() => openPricingModal(prod)}
+                                  className="px-2.5 py-1 rounded-lg border border-[#E8DDD7] hover:bg-[#F7EFE8] text-[#351207] font-semibold text-[11px]"
+                                >
+                                  Edit Pricing
+                                </button>
+                              </td>
+                            </tr>
+                          );
+                        })}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Edit Pricing Modal */}
+                {editingPricingProduct && (
+                  <div
+                    className="fixed inset-0 z-50 bg-[#351207]/80 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto"
+                    onClick={() => setEditingPricingProduct(null)}
+                  >
+                    <div
+                      className="bg-[#FFFFFF] rounded-3xl max-w-2xl w-full p-6 sm:p-8 space-y-6 border border-[#E8DDD7] shadow-2xl my-8 max-h-[92vh] overflow-y-auto"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      <div className="flex items-start justify-between border-b border-[#E8DDD7] pb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="relative w-12 h-12 rounded-xl overflow-hidden shrink-0 border bg-[#F7EFE8]">
+                            <Image
+                              src={editingPricingProduct.primary_image_url}
+                              alt={editingPricingProduct.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                          <div>
+                            <h3 className="font-serif font-black text-xl text-[#351207]">
+                              {editingPricingProduct.name}
+                            </h3>
+                            <div className="text-xs text-[#6F625C] capitalize">
+                              {editingPricingProduct.division.replace(/_/g, " ")} • {editingPricingProduct.category.replace(/_/g, " ")}
+                            </div>
+                          </div>
+                        </div>
+
+                        <button
+                          onClick={() => setEditingPricingProduct(null)}
+                          className="p-1 rounded-full hover:bg-[#F7EFE8] text-[#351207]"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+
+                      <form onSubmit={handleSaveProductPricing} className="space-y-6">
+                        {/* 1. PRICING METHOD SELECTOR */}
+                        <div>
+                          <label className="block text-xs font-bold text-[#351207] mb-1.5">
+                            Select Pricing Method
+                          </label>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {[
+                              { id: "starting_at", label: "Starting Price (From ₦X)" },
+                              { id: "per_unit", label: "Per Unit (₦X / piece)" },
+                              { id: "quantity_tiers", label: "Quantity Tiers (Boxes/Trays)" },
+                              { id: "fixed", label: "Fixed Price (₦X)" },
+                              { id: "price_range", label: "Price Range (₦X – ₦Y)" },
+                              { id: "quote_only", label: "Custom Quote Only" },
+                            ].map((opt) => (
+                              <button
+                                type="button"
+                                key={opt.id}
+                                onClick={() => setEditMethod(opt.id as PricingMethod)}
+                                className={`p-2.5 rounded-xl border text-xs font-semibold text-left transition-all ${
+                                  editMethod === opt.id
+                                    ? "border-[#F50057] bg-[#FFF0F5] text-[#F50057]"
+                                    : "border-[#E8DDD7] hover:bg-[#F7EFE8] text-[#351207]"
+                                }`}
+                              >
+                                {opt.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* 2. RELEVANT FIELDS FOR SELECTED METHOD */}
+                        {editMethod !== "quote_only" && (
+                          <div className="bg-[#FFF9F5] p-4 rounded-2xl border border-[#E8DDD7] space-y-4">
+                            <span className="text-xs font-bold uppercase tracking-wider text-[#F50057] block">
+                              Public Price Configuration
+                            </span>
+
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div>
+                                <label className="block text-xs font-bold text-[#351207] mb-1">
+                                  {editMethod === "starting_at"
+                                    ? "Starting Base Price (₦)"
+                                    : editMethod === "per_unit"
+                                    ? "Unit Price (₦)"
+                                    : "Selling Price (₦)"}
+                                </label>
+                                <div className="relative">
+                                  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#6F625C]">
+                                    ₦
+                                  </span>
+                                  <input
+                                    type="number"
+                                    placeholder="e.g. 35000"
+                                    value={editBasePrice}
+                                    onChange={(e) =>
+                                      setEditBasePrice(
+                                        e.target.value ? Number(e.target.value) : ""
+                                      )
+                                    }
+                                    className="w-full pl-8 pr-3 py-2 rounded-xl border border-[#E8DDD7] text-sm font-bold text-[#351207] bg-white"
+                                  />
+                                </div>
+                              </div>
+
+                              {editMethod === "price_range" && (
+                                <div>
+                                  <label className="block text-xs font-bold text-[#351207] mb-1">
+                                    Maximum Price (₦)
+                                  </label>
+                                  <div className="relative">
+                                    <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-[#6F625C]">
+                                      ₦
+                                    </span>
+                                    <input
+                                      type="number"
+                                      placeholder="e.g. 75000"
+                                      value={editMaxPrice}
+                                      onChange={(e) =>
+                                        setEditMaxPrice(
+                                          e.target.value ? Number(e.target.value) : ""
+                                        )
+                                      }
+                                      className="w-full pl-8 pr-3 py-2 rounded-xl border border-[#E8DDD7] text-sm font-bold text-[#351207] bg-white"
+                                    />
+                                  </div>
+                                </div>
+                              )}
+
+                              {editMethod === "per_unit" && (
+                                <div>
+                                  <label className="block text-xs font-bold text-[#351207] mb-1">
+                                    Unit Label
+                                  </label>
+                                  <input
+                                    type="text"
+                                    placeholder="e.g., piece, pack, slice, jar"
+                                    value={editUnitLabel}
+                                    onChange={(e) => setEditUnitLabel(e.target.value)}
+                                    className="w-full px-3 py-2 rounded-xl border border-[#E8DDD7] text-sm bg-white"
+                                  />
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Quantity Tiers Manager */}
+                            {editMethod === "quantity_tiers" && (
+                              <div className="space-y-3 pt-2">
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs font-bold text-[#351207]">
+                                    Quantity / Box Tiers:
+                                  </span>
+                                  <button
+                                    type="button"
+                                    onClick={handleAddTier}
+                                    className="text-xs text-[#F50057] font-semibold flex items-center gap-1 hover:underline"
+                                  >
+                                    <Plus className="w-3.5 h-3.5" /> Add Tier
+                                  </button>
+                                </div>
+
+                                <div className="space-y-2">
+                                  {editTiers.map((tier, idx) => (
+                                    <div
+                                      key={idx}
+                                      className="flex items-center gap-2 p-2.5 rounded-xl bg-white border border-[#E8DDD7]"
+                                    >
+                                      <input
+                                        type="text"
+                                        placeholder="Label (e.g. Box of 6)"
+                                        value={tier.label}
+                                        onChange={(e) =>
+                                          handleUpdateTier(idx, "label", e.target.value)
+                                        }
+                                        className="flex-1 px-2.5 py-1.5 rounded-lg border border-[#E8DDD7] text-xs"
+                                      />
+                                      <div className="relative w-32">
+                                        <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-xs font-bold text-[#6F625C]">
+                                          ₦
+                                        </span>
+                                        <input
+                                          type="number"
+                                          placeholder="Price"
+                                          value={tier.price}
+                                          onChange={(e) =>
+                                            handleUpdateTier(idx, "price", Number(e.target.value))
+                                          }
+                                          className="w-full pl-6 pr-2 py-1.5 rounded-lg border border-[#E8DDD7] text-xs font-bold"
+                                        />
+                                      </div>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleRemoveTier(idx)}
+                                        className="p-1.5 text-red-600 hover:bg-red-50 rounded-lg"
+                                      >
+                                        <Trash2 className="w-4 h-4" />
+                                      </button>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            <div>
+                              <label className="block text-xs font-bold text-[#351207] mb-1">
+                                Customer Pricing Notes (Optional)
+                              </label>
+                              <input
+                                type="text"
+                                placeholder="e.g., Starting price for 8-inch single tier. Multi-tier quoted on request."
+                                value={editPriceNotes}
+                                onChange={(e) => setEditPriceNotes(e.target.value)}
+                                className="w-full px-3 py-2 rounded-xl border border-[#E8DDD7] text-xs bg-white"
+                              />
+                            </div>
+                          </div>
+                        )}
+
+                        {/* 3. CONFIDENTIAL PRODUCTION COST & MARGIN CALCULATOR */}
+                        <div className="bg-[#351207] text-[#FFF9F5] p-5 rounded-2xl space-y-4">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2">
+                              <Calculator className="w-4 h-4 text-[#F50057]" />
+                              <h4 className="font-serif font-bold text-sm text-white">
+                                Private Production Cost & Margin Calculator
+                              </h4>
+                            </div>
+                            <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-[#5A2718] text-[#F50057]">
+                              Strictly Confidential
+                            </span>
+                          </div>
+
+                          <p className="text-[11px] text-[#F7EFE8]/75 leading-relaxed">
+                            Formula:{" "}
+                            <code className="text-[#F50057] font-mono font-bold">
+                              Selling Price = Unit Cost ÷ (1 − Target Margin)
+                            </code>
+                            . Enter your real ingredient, packaging, and labor unit cost to calculate the exact recommended price.
+                          </p>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                              <label className="block text-xs font-bold text-[#F7EFE8] mb-1">
+                                Total Unit Production Cost (₦)
+                              </label>
+                              <div className="relative">
+                                <span className="absolute left-3 top-1/2 -translate-y-1/2 text-xs font-bold text-white/50">
+                                  ₦
+                                </span>
+                                <input
+                                  type="number"
+                                  placeholder="e.g. 17500"
+                                  value={editUnitCost}
+                                  onChange={(e) =>
+                                    setEditUnitCost(
+                                      e.target.value ? Number(e.target.value) : ""
+                                    )
+                                  }
+                                  className="w-full pl-8 pr-3 py-2 rounded-xl bg-[#220B04] border border-[#5A2718] text-sm font-bold text-white focus:outline-none focus:border-[#F50057]"
+                                />
+                              </div>
+                            </div>
+
+                            <div>
+                              <label className="block text-xs font-bold text-[#F7EFE8] mb-1">
+                                Target Gross Margin (%): {Math.round(editTargetMargin * 100)}%
+                              </label>
+                              <input
+                                type="range"
+                                min="0.20"
+                                max="0.80"
+                                step="0.05"
+                                value={editTargetMargin}
+                                onChange={(e) => setEditTargetMargin(Number(e.target.value))}
+                                className="w-full accent-[#F50057] cursor-pointer mt-2"
+                              />
+                            </div>
+                          </div>
+
+                          {/* Live Calculated Metric Box */}
+                          {liveCost > 0 && (
+                            <div className="p-3.5 rounded-xl bg-[#220B04] border border-[#5A2718] flex flex-col sm:flex-row items-center justify-between gap-3 text-xs">
+                              <div>
+                                <span className="text-white/70 block">Recommended Price:</span>
+                                <span className="font-serif font-black text-base text-[#F50057]">
+                                  {formatNaira(liveCalc.recommendedPrice)}
+                                </span>
+                                <span className="text-[10px] text-white/60 ml-2">
+                                  (Profit: {formatNaira(liveCalc.grossProfit)})
+                                </span>
+                              </div>
+
+                              <button
+                                type="button"
+                                onClick={() => setEditBasePrice(liveCalc.recommendedPrice)}
+                                className="px-3 py-1.5 rounded-lg bg-[#F50057] hover:bg-[#D5004C] text-white text-xs font-bold transition-colors"
+                              >
+                                Apply to Selling Price
+                              </button>
+                            </div>
+                          )}
+
+                          <div>
+                            <label className="block text-[11px] font-bold text-[#F7EFE8] mb-1">
+                              Private Cost Breakdown Notes (Internal Only)
+                            </label>
+                            <input
+                              type="text"
+                              placeholder="e.g., Flour & butter: ₦9,000, Eggs & sugar: ₦4,500, Packaging & box: ₦4,000"
+                              value={editCostNotes}
+                              onChange={(e) => setEditCostNotes(e.target.value)}
+                              className="w-full px-3 py-1.5 rounded-lg bg-[#220B04] border border-[#5A2718] text-xs text-white"
+                            />
+                          </div>
+                        </div>
+
+                        {/* 4. APPROVAL TOGGLE */}
+                        <div className="p-4 rounded-2xl bg-[#FFF9F5] border border-[#E8DDD7] flex items-center justify-between">
+                          <div>
+                            <div className="text-xs font-bold text-[#351207]">
+                              Approve and Publish Price
+                            </div>
+                            <div className="text-[11px] text-[#6F625C]">
+                              When checked, this price displays publicly on the live website. If unchecked, the item displays &ldquo;Custom Quote&rdquo;.
+                            </div>
+                          </div>
+                          <input
+                            type="checkbox"
+                            checked={editIsApproved}
+                            onChange={(e) => setEditIsApproved(e.target.checked)}
+                            className="w-5 h-5 accent-[#F50057] rounded cursor-pointer"
+                          />
+                        </div>
+
+                        {/* Form Submit Buttons */}
+                        <div className="flex items-center justify-end gap-3 pt-2">
+                          <button
+                            type="button"
+                            onClick={() => setEditingPricingProduct(null)}
+                            className="px-4 py-2.5 rounded-xl border border-[#E8DDD7] text-xs font-semibold text-[#351207] hover:bg-[#F7EFE8]"
+                          >
+                            Cancel
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={savingPrice}
+                            className="px-6 py-2.5 rounded-xl bg-[#F50057] hover:bg-[#D5004C] text-white text-xs font-bold shadow-md transition-all flex items-center gap-1.5"
+                          >
+                            {savingPrice ? (
+                              <span>Saving...</span>
+                            ) : (
+                              <>
+                                <Check className="w-4 h-4" />
+                                <span>Save & Update Pricing</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* ================= 3. ENQUIRIES TAB ================= */}
             {activeTab === "enquiries" && (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#FFFFFF] p-4 rounded-2xl border border-[#E8DDD7]">
@@ -729,6 +1469,13 @@ export default function AdminPage() {
                           </div>
                         )}
 
+                        {selectedEnquiry.budget_range && (
+                          <div>
+                            <span className="font-bold text-[#6F625C]">Customer Budget:</span>
+                            <p className="font-semibold text-[#F50057]">{selectedEnquiry.budget_range}</p>
+                          </div>
+                        )}
+
                         {selectedEnquiry.design_notes && (
                           <div>
                             <span className="font-bold text-[#6F625C]">Customer Notes:</span>
@@ -798,7 +1545,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= 3. PHOTO MANAGEMENT & REVIEW TAB ================= */}
+            {/* ================= 4. PHOTO MANAGEMENT & REVIEW TAB ================= */}
             {activeTab === "images" && (
               <div className="space-y-6">
                 <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-[#FFFFFF] p-4 rounded-2xl border border-[#E8DDD7]">
@@ -909,13 +1656,12 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= 4. PRODUCTS TAB ================= */}
+            {/* ================= 5. PRODUCTS TAB ================= */}
             {activeTab === "products" && (
               <div className="space-y-6">
                 <div className="flex items-center justify-between bg-[#FFFFFF] p-4 rounded-2xl border border-[#E8DDD7]">
                   <div className="text-xs text-[#6F625C]">
-                    Manage public catalogue products. Products are automatically indexed from approved
-                    photos or can be curated below.
+                    Manage public catalogue products. You can manage descriptions, divisions, and quick pricing from here.
                   </div>
                 </div>
 
@@ -939,6 +1685,9 @@ export default function AdminPage() {
                         <div className="text-[11px] text-[#6F625C] capitalize">
                           Division: {prod.division.replace(/_/g, " ")} • {prod.category.replace(/_/g, " ")}
                         </div>
+                        <div className="text-xs font-bold text-[#F50057]">
+                          {prod.price_display}
+                        </div>
                         <p className="text-[11px] text-[#6F625C] line-clamp-2">
                           {prod.description}
                         </p>
@@ -954,13 +1703,16 @@ export default function AdminPage() {
                         >
                           {prod.is_published ? "Published" : "Draft"}
                         </span>
-                        <Link
-                          href={`/${prod.division === "cakes" ? "cakes" : "bakes-and-small-chops"}`}
+                        <button
+                          onClick={() => {
+                            setActiveTab("pricing");
+                            openPricingModal(prod);
+                          }}
                           className="text-[11px] font-semibold text-[#F50057] hover:underline flex items-center gap-1"
                         >
-                          <span>View Live</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </Link>
+                          <span>Manage Price</span>
+                          <Tag className="w-3 h-3" />
+                        </button>
                       </div>
                     </div>
                   ))}
@@ -968,7 +1720,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= 5. SYNC & WATCHER SETTINGS ================= */}
+            {/* ================= 6. SYNC & WATCHER SETTINGS ================= */}
             {activeTab === "sync" && (
               <div className="max-w-3xl space-y-6">
                 <div className="bg-[#FFFFFF] p-6 rounded-2xl border border-[#E8DDD7] space-y-4">
@@ -981,7 +1733,7 @@ export default function AdminPage() {
                       Website Assets/
                     </code>
                     . When new images are saved into those folders, the watcher automatically processes,
-                    generates WebP formats, detects duplicates, and publishes them.
+                    generates WebP formats, detects duplicates, recommends category pricing structures, and marks prices as <strong>Pending Owner Approval</strong>.
                   </p>
 
                   <div className="p-4 rounded-xl bg-[#FFF9F5] border border-[#E8DDD7] space-y-3">
@@ -991,8 +1743,8 @@ export default function AdminPage() {
                           Automatic Publication for High-Confidence Photos
                         </div>
                         <div className="text-[11px] text-[#6F625C]">
-                          When enabled, photos with high classification confidence appear immediately in the
-                          catalogue without manual approval.
+                          When enabled, photos with high classification confidence appear in the
+                          catalogue without manual approval. Prices remain safely unapproved until confirmed.
                         </div>
                       </div>
                       <input
@@ -1063,7 +1815,7 @@ export default function AdminPage() {
               </div>
             )}
 
-            {/* ================= 6. SETTINGS TAB ================= */}
+            {/* ================= 7. SETTINGS TAB ================= */}
             {activeTab === "settings" && (
               <div className="max-w-2xl bg-[#FFFFFF] p-6 rounded-2xl border border-[#E8DDD7] space-y-6">
                 <div>

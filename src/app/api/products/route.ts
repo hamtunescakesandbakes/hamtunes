@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getAllProducts, saveProduct } from "@/lib/db";
+import { getAllProducts, getAllAdminProducts, saveProduct } from "@/lib/db";
 import { Product } from "@/lib/types";
 
 export async function GET(request: Request) {
@@ -9,8 +9,10 @@ export async function GET(request: Request) {
     const category = searchParams.get("category");
     const search = searchParams.get("search");
     const featuredOnly = searchParams.get("featured") === "true";
+    const isAdmin = searchParams.get("admin") === "true";
 
-    let products = getAllProducts();
+    // Admin receives full unmasked products with private costs & approval status
+    let products = isAdmin ? getAllAdminProducts() : getAllProducts();
 
     if (division) {
       products = products.filter((p) => p.division === division);
@@ -67,7 +69,18 @@ export async function POST(request: Request) {
       primary_image_id: body.primary_image_id || "",
       primary_image_url: body.primary_image_url || "/images/logo.png",
       gallery_images: body.gallery_images || [],
-      price_display: body.price_display || "Enquire for custom sizing",
+      
+      // Pricing
+      pricing_method: body.pricing_method || "starting_at",
+      currency: "NGN",
+      base_price: body.base_price !== undefined ? Number(body.base_price) : undefined,
+      max_price: body.max_price !== undefined ? Number(body.max_price) : undefined,
+      unit_label: body.unit_label || (body.division === "cakes" ? "cake" : "piece"),
+      quantity_tiers: body.quantity_tiers || [],
+      price_notes: body.price_notes || "",
+      is_price_approved: Boolean(body.is_price_approved),
+      private_costs: body.private_costs || undefined,
+
       is_featured: Boolean(body.is_featured),
       is_published: body.is_published !== undefined ? Boolean(body.is_published) : true,
       tags: body.tags || [],
@@ -76,8 +89,8 @@ export async function POST(request: Request) {
       updated_at: new Date().toISOString(),
     };
 
-    saveProduct(newProduct);
-    return NextResponse.json({ success: true, product: newProduct });
+    const saved = saveProduct(newProduct);
+    return NextResponse.json({ success: true, product: saved });
   } catch (error: any) {
     return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }

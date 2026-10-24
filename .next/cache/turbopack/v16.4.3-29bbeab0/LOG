@@ -97,3 +97,16 @@ FAM | META SEQ | SST SEQ         | RANGE
     |          | 00000017 00000028 00000036 META DELETED
     |          | 00000018 00000027 00000035 META DELETED
     |          | 00000019 00000026 00000034 META DELETED
+Time 2026-10-24T11:13:03.0504088Z
+Commit 00000054 23082 keys in 101ms 353µs 200ns
+FAM | META SEQ | SST SEQ         | RANGE
+  0 | 00000051 | 00000050 SST    |                                                                             O                        | c44bdff4074eecdb-c44bdff4074eecdb (0 MiB, fresh, 38 bytes, 1 entries, 0 tombstones)
+  1 | 00000052 | 00000047 SST    | [==================================================================================================] | 0001f41e0c50d7ac-ffface65ed8cdfcc (2 MiB, fresh, 2865128 bytes, 14604 entries, 0 tombstones)
+  3 | 00000053 | 00000049 SST    | [==================================================================================================] | 0089c073410e20ef-ffef8a4bc4580962 (0 MiB, fresh, 24801 bytes, 2057 entries, 0 tombstones)
+  2 | 00000054 | 00000048 SST    | [==================================================================================================] | 0004c06323289671-ffface65ed8cdfcc (4 MiB, fresh, 4622446 bytes, 6420 entries, 0 tombstones)
+Time 2026-10-24T11:13:49.0329091Z
+Commit 00000060 1017 keys in 31ms 492µs 400ns
+FAM | META SEQ | SST SEQ         | RANGE
+  0 | 00000058 | 00000057 SST    |                                                                             O                        | c44bdff4074eecdb-c44bdff4074eecdb (0 MiB, fresh, 38 bytes, 1 entries, 0 tombstones)
+  2 | 00000059 | 00000055 SST    | [=================================================================================================]  | 0077efba746d69c9-fcf746fc00f0c442 (0 MiB, fresh, 137969 bytes, 36 entries, 0 tombstones)
+  1 | 00000060 | 00000056 SST    | [==================================================================================================] | 0001f41e0c50d7ac-ffd192a30bbae986 (0 MiB, fresh, 504241 bytes, 980 entries, 0 tombstones)

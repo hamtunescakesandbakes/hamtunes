@@ -33,6 +33,27 @@ export interface Asset {
   updated_at: string;
 }
 
+export type PricingMethod =
+  | "fixed"
+  | "starting_at"
+  | "per_unit"
+  | "quantity_tiers"
+  | "price_range"
+  | "quote_only";
+
+export interface QuantityTier {
+  quantity: number;
+  label: string; // e.g., "Box of 6", "Pack of 12", "50 pieces"
+  price: number; // in NGN
+}
+
+export interface PrivateCosts {
+  unit_cost?: number; // Total direct production cost in NGN (strictly internal)
+  target_gross_margin?: number; // e.g. 0.50 (50%)
+  recommended_price?: number; // Calculated: unit_cost / (1 - margin)
+  cost_notes?: string; // Private admin notes on ingredients, packaging, labour
+}
+
 export interface Product {
   id: string;
   name: string;
@@ -43,7 +64,21 @@ export interface Product {
   primary_image_id: string;
   primary_image_url: string;
   gallery_images: string[];
-  price_display?: string; // Optional price or custom quote indicator
+  
+  // Pricing System
+  pricing_method: PricingMethod;
+  currency: "NGN";
+  base_price?: number; // in NGN
+  max_price?: number; // for price_range
+  unit_label?: string; // e.g., "piece", "cake", "tray", "box"
+  quantity_tiers?: QuantityTier[];
+  price_notes?: string; // e.g., "Varies by tier count, complexity, and custom topper"
+  is_price_approved: boolean; // false = Pending Owner Approval; true = Approved & Public
+  price_display?: string; // Formatted display text (e.g., "From ₦35,000")
+  
+  // Private Cost & Margin Fields (Stripped in public API responses)
+  private_costs?: PrivateCosts;
+
   is_featured: boolean;
   is_published: boolean;
   tags: string[];

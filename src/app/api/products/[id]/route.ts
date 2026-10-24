@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { getProductById, saveProduct, deleteProduct } from "@/lib/db";
+import { getAdminProductById, saveProduct, deleteProduct } from "@/lib/db";
 
 export async function PATCH(
   request: Request,
@@ -9,7 +9,7 @@ export async function PATCH(
     const { id } = await params;
     const body = await request.json();
 
-    const existing = getProductById(id);
+    const existing = getAdminProductById(id);
     if (!existing) {
       return NextResponse.json({ success: false, error: "Product not found" }, { status: 404 });
     }

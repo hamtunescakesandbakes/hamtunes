@@ -270,6 +270,8 @@ async function generateOptimizedImages(
   };
 }
 
+import { CATEGORY_PRICING_GUIDELINES } from "../pricing";
+
 /**
  * Creates or updates a public Product entry corresponding to an approved/published asset
  */
@@ -291,6 +293,8 @@ function syncProductForAsset(asset: Asset) {
     });
   } else {
     const isCake = asset.division === "cakes";
+    const pricingGuideline = CATEGORY_PRICING_GUIDELINES[asset.category];
+
     const product: Product = {
       id: `prod_${asset.hash}`,
       name: asset.caption,
@@ -301,6 +305,25 @@ function syncProductForAsset(asset: Asset) {
       primary_image_id: asset.id,
       primary_image_url: asset.web_url,
       gallery_images: [asset.web_url],
+
+      // Pricing structure — Marked as Pending Owner Approval
+      pricing_method: pricingGuideline?.defaultMethod || (isCake ? "starting_at" : "per_unit"),
+      currency: "NGN",
+      base_price: pricingGuideline?.suggestedBasePrice,
+      max_price: pricingGuideline?.suggestedMaxPrice,
+      unit_label: pricingGuideline?.unitLabel || (isCake ? "cake" : "piece"),
+      quantity_tiers: pricingGuideline?.defaultTiers || [],
+      price_notes: pricingGuideline?.pricingNotes || "Pricing tailored to confirmed order specifications",
+      is_price_approved: false, // Critical: Pending Owner Approval
+
+      // Private cost & margin calculations (Strictly internal)
+      private_costs: {
+        unit_cost: pricingGuideline?.suggestedUnitCost,
+        target_gross_margin: pricingGuideline?.suggestedTargetMargin || 0.50,
+        recommended_price: pricingGuideline?.suggestedBasePrice,
+        cost_notes: "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation.",
+      },
+
       is_featured: asset.is_featured,
       is_published: true,
       tags: [asset.category, isCake ? "Cake" : "Bakes", "Celebration", "Custom"],

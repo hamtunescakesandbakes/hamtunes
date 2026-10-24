@@ -393,13 +393,19 @@ function EnquireContent() {
                   <label className="block text-xs font-bold text-[#351207] mb-1">
                     Estimated Budget Range (Optional)
                   </label>
-                  <input
-                    type="text"
-                    placeholder="e.g., Open / Standard pricing"
+                  <select
                     value={budget}
                     onChange={(e) => setBudget(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DDD7] text-sm focus:outline-none focus:border-[#F50057]"
-                  />
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DDD7] text-sm focus:outline-none focus:border-[#F50057] bg-white"
+                  >
+                    <option value="">Select or leave open for consultation</option>
+                    <option value="Flexible / Recommend for occasion">Flexible / Recommend based on my needs</option>
+                    <option value="Under ₦25,000">Under ₦25,000 (Mini/Gifting cakes, pastries, treat boxes)</option>
+                    <option value="₦25,000 – ₦50,000">₦25,000 – ₦50,000 (Single-tier custom cakes, party small chops)</option>
+                    <option value="₦50,000 – ₦100,000">₦50,000 – ₦100,000 (Deluxe birthday cakes, celebratory platters)</option>
+                    <option value="₦100,000 – ₦250,000">₦100,000 – ₦250,000 (Two-tier milestone cakes, event finger foods)</option>
+                    <option value="₦250,000+">₦250,000+ (Multi-tier wedding centerpieces & grand catering)</option>
+                  </select>
                 </div>
               </div>
 

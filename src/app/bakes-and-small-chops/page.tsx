@@ -92,6 +92,22 @@ export default function BakesAndSmallChopsPage() {
               <span>Bulk Order WhatsApp Chat</span>
             </a>
           </div>
+
+          {/* Pricing Transparency Pill */}
+          <div className="pt-6 max-w-3xl mx-auto">
+            <div className="bg-white/80 backdrop-blur-xs p-4 rounded-2xl border border-[#E8DDD7] text-xs text-[#6F625C] flex flex-col sm:flex-row items-center justify-between gap-3 text-left">
+              <div>
+                <span className="font-bold text-[#351207] block">Bakes & Small Chops Pricing:</span>
+                Savory meat pies from ₦1,500/pc, golden sausage rolls from ₦1,200/pc, artisan doughnuts and cupcakes from ₦7,000/box, and party small chops platters from ₦18,000 (Midi) to ₦60,000 (Grand).
+              </div>
+              <Link
+                href="/enquire?type=bakes_and_small_chops"
+                className="shrink-0 text-[#F50057] font-semibold hover:underline"
+              >
+                Order Platter &rarr;
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
 
