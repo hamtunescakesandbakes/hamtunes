@@ -17,11 +17,15 @@ import { buildWhatsAppLink } from "@/lib/whatsapp";
 import ProductCard from "@/components/ProductCard";
 import ImageGalleryModal from "@/components/ImageGalleryModal";
 import { Product } from "@/lib/types";
+import seedData from "../../../data/database.json";
 
-// Client-side interactive catalog with initial products fetched from API or embedded
+const DEFAULT_CAKES: Product[] = (seedData.products as Product[])
+  .filter((p) => p.division === "cakes" && p.is_published)
+  .sort((a, b) => (a.order_rank ?? 0) - (b.order_rank ?? 0));
+
 export default function CakesPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(DEFAULT_CAKES);
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -31,12 +35,11 @@ export default function CakesPage() {
     fetch("/api/products?division=cakes")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.products)) {
+        if (data.success && Array.isArray(data.products) && data.products.length > 0) {
           setProducts(data.products);
         }
       })
-      .catch((err) => console.error("Error fetching cakes:", err))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Error fetching cakes:", err));
   }, []);
 
   const filteredProducts = useMemo(() => {

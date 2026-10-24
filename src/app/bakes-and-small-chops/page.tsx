@@ -17,10 +17,15 @@ import { buildWhatsAppLink } from "@/lib/whatsapp";
 import ProductCard from "@/components/ProductCard";
 import ImageGalleryModal from "@/components/ImageGalleryModal";
 import { Product } from "@/lib/types";
+import seedData from "../../../data/database.json";
+
+const DEFAULT_BAKES: Product[] = (seedData.products as Product[])
+  .filter((p) => p.division === "bakes_and_small_chops" && p.is_published)
+  .sort((a, b) => (a.order_rank ?? 0) - (b.order_rank ?? 0));
 
 export default function BakesAndSmallChopsPage() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [products, setProducts] = useState<Product[]>(DEFAULT_BAKES);
+  const [loading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
@@ -30,12 +35,11 @@ export default function BakesAndSmallChopsPage() {
     fetch("/api/products?division=bakes_and_small_chops")
       .then((res) => res.json())
       .then((data) => {
-        if (data.success && Array.isArray(data.products)) {
+        if (data.success && Array.isArray(data.products) && data.products.length > 0) {
           setProducts(data.products);
         }
       })
-      .catch((err) => console.error("Error fetching bakes:", err))
-      .finally(() => setLoading(false));
+      .catch((err) => console.error("Error fetching bakes:", err));
   }, []);
 
   const filteredProducts = useMemo(() => {

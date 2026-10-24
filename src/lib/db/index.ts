@@ -30,9 +30,13 @@ const DEFAULT_SYNC_SETTINGS: SyncSettings = {
   confidence_threshold: 0.8,
 };
 
+import seedData from "../../../data/database.json";
+
 function initDB(): DatabaseSchema {
   if (!fs.existsSync(DB_DIR)) {
-    fs.mkdirSync(DB_DIR, { recursive: true });
+    try {
+      fs.mkdirSync(DB_DIR, { recursive: true });
+    } catch {}
   }
 
   if (fs.existsSync(DB_FILE)) {
@@ -40,22 +44,11 @@ function initDB(): DatabaseSchema {
       const content = fs.readFileSync(DB_FILE, "utf-8");
       return JSON.parse(content);
     } catch (err) {
-      console.error("Error reading database.json, initializing fresh:", err);
+      console.error("Error reading database.json, using bundled seed data:", err);
     }
   }
 
-  const initialDB: DatabaseSchema = {
-    version: 1,
-    assets: [],
-    products: [],
-    enquiries: [],
-    syncSettings: DEFAULT_SYNC_SETTINGS,
-    syncLogs: [],
-    websiteSettings: DEFAULT_SETTINGS,
-  };
-
-  fs.writeFileSync(DB_FILE, JSON.stringify(initialDB, null, 2), "utf-8");
-  return initialDB;
+  return (seedData as unknown) as DatabaseSchema;
 }
 
 // In-memory cache
