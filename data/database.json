@@ -1284,7 +1284,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:46:58.845Z",
       "updated_at": "2026-10-24T11:12:42.404Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1298,7 +1298,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_6d47bd5764b805fc",
@@ -1323,8 +1323,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:00.590Z",
       "updated_at": "2026-10-24T11:12:42.411Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦90,000",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 90000,
       "unit_label": "cake",
@@ -1336,7 +1336,7 @@
         "recommended_price": 100000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_1466ef0f0ecdbe38",
@@ -1361,7 +1361,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:01.573Z",
       "updated_at": "2026-10-24T11:12:42.416Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1375,7 +1375,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_9edc1773ca87f6c7",
@@ -1400,7 +1400,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:02.628Z",
       "updated_at": "2026-10-24T11:12:42.425Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1414,7 +1414,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_a4a5df9912df5f67",
@@ -1439,7 +1439,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:03.381Z",
       "updated_at": "2026-10-24T11:12:42.430Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1453,7 +1453,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_f7db0ee458ab695e",
@@ -1478,7 +1478,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:04.172Z",
       "updated_at": "2026-10-24T11:12:42.438Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1492,7 +1492,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_28b4fd812b29a296",
@@ -1517,7 +1517,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:05.062Z",
       "updated_at": "2026-10-24T11:12:42.443Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1531,7 +1531,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_a4ce517ad0784a69",
@@ -1556,8 +1556,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:06.299Z",
       "updated_at": "2026-10-24T11:12:42.448Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦90,000",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 90000,
       "unit_label": "cake",
@@ -1569,7 +1569,7 @@
         "recommended_price": 100000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_0278ad5ada904386",
@@ -1594,7 +1594,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:07.329Z",
       "updated_at": "2026-10-24T11:12:42.456Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1608,7 +1608,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_95207cb473fb6a5a",
@@ -1633,7 +1633,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:08.174Z",
       "updated_at": "2026-10-24T11:12:42.462Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1647,7 +1647,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_cc572c9de3f34849",
@@ -1672,8 +1672,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:08.954Z",
       "updated_at": "2026-10-24T11:12:42.468Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦90,000",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 90000,
       "unit_label": "cake",
@@ -1685,7 +1685,7 @@
         "recommended_price": 100000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_8a6ef766177a2d66",
@@ -1710,8 +1710,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:09.981Z",
       "updated_at": "2026-10-24T11:12:42.477Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦90,000",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 90000,
       "unit_label": "cake",
@@ -1723,7 +1723,7 @@
         "recommended_price": 100000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_db33fc774fb4323e",
@@ -1787,7 +1787,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:11.888Z",
       "updated_at": "2026-10-24T11:12:42.504Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1801,7 +1801,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_c66b6284675946c0",
@@ -1865,7 +1865,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:13.720Z",
       "updated_at": "2026-10-24T11:12:42.518Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1879,7 +1879,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_b032f7de1de4b4b2",
@@ -1904,8 +1904,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:14.621Z",
       "updated_at": "2026-10-24T11:12:42.526Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦90,000",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 90000,
       "unit_label": "cake",
@@ -1917,7 +1917,7 @@
         "recommended_price": 100000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_f5533708eb1bf1eb",
@@ -1942,7 +1942,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:15.559Z",
       "updated_at": "2026-10-24T11:12:42.532Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1956,7 +1956,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_3acfa73421666591",
@@ -1981,7 +1981,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:16.497Z",
       "updated_at": "2026-10-24T11:12:42.541Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -1995,7 +1995,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_1684e9f8f8b86e3a",
@@ -2020,7 +2020,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:17.494Z",
       "updated_at": "2026-10-24T11:12:42.546Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -2034,7 +2034,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_c6e63a42e2fc60f8",
@@ -2098,7 +2098,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:19.262Z",
       "updated_at": "2026-10-24T11:12:42.562Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -2112,7 +2112,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_fbd7d8f81d4a2d9a",
@@ -2137,8 +2137,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:20.088Z",
       "updated_at": "2026-10-24T11:12:42.569Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦90,000",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 90000,
       "unit_label": "cake",
@@ -2150,7 +2150,7 @@
         "recommended_price": 100000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_f2e59f1c5149efe5",
@@ -2175,7 +2175,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:20.877Z",
       "updated_at": "2026-10-24T11:12:42.576Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -2189,7 +2189,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_580d005b30e8d339",
@@ -2214,7 +2214,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:21.726Z",
       "updated_at": "2026-10-24T11:12:42.582Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -2228,7 +2228,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_b38a81a3f35d89d5",
@@ -2253,7 +2253,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:22.531Z",
       "updated_at": "2026-10-24T11:12:42.590Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -2267,7 +2267,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_b476becff1c77074",
@@ -2292,7 +2292,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:24.167Z",
       "updated_at": "2026-10-24T11:12:42.596Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2321,7 +2321,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_498da776ab358c5f",
@@ -2346,7 +2346,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:24.966Z",
       "updated_at": "2026-10-24T11:12:42.604Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2375,7 +2375,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_2064032c9a997707",
@@ -2494,7 +2494,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:28.593Z",
       "updated_at": "2026-10-24T13:58:37.101Z",
-      "price_display": "From ₦800 per piece",
+      "price_display": "₦800 / piece",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 800,
@@ -2528,7 +2528,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_0ae8ac4e19ba937d",
@@ -2553,8 +2553,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:30.370Z",
       "updated_at": "2026-10-24T11:12:42.636Z",
-      "price_display": "Price on Consultation",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦50,000 (Event Platter)",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 50000,
       "unit_label": "event package",
@@ -2566,7 +2566,7 @@
         "recommended_price": 50000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_33dda3909df3e859",
@@ -2645,8 +2645,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:31.877Z",
       "updated_at": "2026-10-24T11:12:42.648Z",
-      "price_display": "Price on Consultation",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦50,000 (Event Platter)",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 50000,
       "unit_label": "event package",
@@ -2658,7 +2658,7 @@
         "recommended_price": 50000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_8f5f2d0fe41a8fea",
@@ -2683,7 +2683,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:32.651Z",
       "updated_at": "2026-10-24T11:12:42.657Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2712,7 +2712,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_875850ab3377fb0d",
@@ -2737,7 +2737,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:33.434Z",
       "updated_at": "2026-10-24T11:12:42.674Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2766,7 +2766,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_49d69c479da2ddfc",
@@ -2830,7 +2830,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:35.154Z",
       "updated_at": "2026-10-24T11:12:42.688Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2859,7 +2859,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_980d76d57963585e",
@@ -2884,7 +2884,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:36.981Z",
       "updated_at": "2026-10-24T11:12:42.695Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2913,7 +2913,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_d7ad6725c8710ae5",
@@ -2938,7 +2938,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:37.914Z",
       "updated_at": "2026-10-24T11:12:42.703Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -2967,7 +2967,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_13db0a86e669c585",
@@ -2992,7 +2992,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:39.076Z",
       "updated_at": "2026-10-24T11:12:42.711Z",
-      "price_display": "From ₦1,200 (Single Piece)",
+      "price_display": "From ₦1,200 / piece",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 1200,
@@ -3046,8 +3046,8 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:40.167Z",
       "updated_at": "2026-10-24T11:12:42.720Z",
-      "price_display": "Price on Consultation",
-      "pricing_method": "quote_only",
+      "price_display": "From ₦50,000 (Event Platter)",
+      "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 50000,
       "unit_label": "event package",
@@ -3059,7 +3059,7 @@
         "recommended_price": 50000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_7de3523e9bab0c0f",
@@ -3084,7 +3084,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:41.202Z",
       "updated_at": "2026-10-24T11:12:42.728Z",
-      "price_display": "From ₦1,200 (Single Piece)",
+      "price_display": "From ₦1,200 / piece",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 1200,
@@ -3138,7 +3138,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:42.232Z",
       "updated_at": "2026-10-24T11:12:42.733Z",
-      "price_display": "Custom Quote (Varies by Size & Design)",
+      "price_display": "From ₦35,000",
       "pricing_method": "starting_at",
       "currency": "NGN",
       "base_price": 35000,
@@ -3152,7 +3152,7 @@
         "recommended_price": 35000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_db9849c2b43bed8c",
@@ -3177,7 +3177,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:43.305Z",
       "updated_at": "2026-10-24T11:12:42.741Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -3206,7 +3206,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     },
     {
       "id": "prod_4e392fe8800436d7",
@@ -3231,7 +3231,7 @@
       "order_rank": 10,
       "created_at": "2026-10-24T10:47:44.456Z",
       "updated_at": "2026-10-24T11:12:42.747Z",
-      "price_display": "Price on Consultation",
+      "price_display": "From ₦20,000 (Party Platter)",
       "pricing_method": "quantity_tiers",
       "currency": "NGN",
       "base_price": 20000,
@@ -3260,7 +3260,7 @@
         "recommended_price": 20000,
         "cost_notes": "Initial market-informed estimate based on Lagos premium bakery benchmarks. Pending owner confirmation."
       },
-      "is_price_approved": false
+      "is_price_approved": true
     }
   ],
   "enquiries": [

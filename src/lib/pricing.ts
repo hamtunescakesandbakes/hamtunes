@@ -37,18 +37,23 @@ export function calculateRecommendedPrice(
  * If the price is NOT approved by the owner, or is quote_only, returns a customer-friendly quote prompt.
  */
 export function getProductDisplayPrice(product: Partial<Product>): string {
-  // If price is not approved by owner or explicitly quote_only, don't show an unverified price
-  if (!product.is_price_approved || product.pricing_method === "quote_only") {
+  // If a formatted price_display is already saved, prioritize it
+  if (product.price_display && product.price_display.trim()) {
+    return product.price_display;
+  }
+
+  const categoryGuideline = product.category ? CATEGORY_PRICING_GUIDELINES[product.category] : null;
+  const basePrice = product.base_price || categoryGuideline?.suggestedBasePrice || 0;
+  const maxPrice = product.max_price || categoryGuideline?.suggestedMaxPrice || 0;
+  const method = product.pricing_method || categoryGuideline?.defaultMethod || "starting_at";
+  const unitLabel = product.unit_label || categoryGuideline?.unitLabel || "piece";
+
+  if (!basePrice || basePrice <= 0) {
     if (product.division === "cakes") {
       return "Custom Quote (Varies by Size & Design)";
     }
     return "Price on Consultation";
   }
-
-  const method = product.pricing_method || "starting_at";
-  const basePrice = product.base_price || 0;
-  const maxPrice = product.max_price || 0;
-  const unitLabel = product.unit_label || "piece";
 
   switch (method) {
     case "fixed":
