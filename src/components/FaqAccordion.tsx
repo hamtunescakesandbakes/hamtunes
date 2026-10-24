@@ -45,7 +45,7 @@ const FAQS: FaqItem[] = [
     category: "Contact",
     question: "What is the best way to contact Hamtunes Cakes & Bakes?",
     answer:
-      "You can chat with us instantly on WhatsApp at +234 803 397 6589, call our direct line at 0904 957 1104, email hamtunescakesandbakes89@gmail.com, or connect on Instagram @hamtunescakes.",
+      `You can reach us directly on our primary line at ${BRAND.primaryPhoneDisplay} (available for both instant WhatsApp chat and direct phone calls), or call our secondary line at ${BRAND.secondaryPhoneDisplay} (calls only). You can also email ${BRAND.email} or connect on Instagram ${BRAND.instagramHandle}.`,
   },
 ];
 

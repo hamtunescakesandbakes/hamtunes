@@ -118,7 +118,7 @@ export default function RootLayout({
       `${BRAND.siteUrl}/images/logo.png`,
       `${BRAND.siteUrl}/images/owner.jpg`,
     ],
-    telephone: BRAND.phoneDisplay,
+    telephone: [BRAND.primaryPhoneDisplay, BRAND.secondaryPhoneDisplay],
     email: BRAND.email,
     sameAs: [BRAND.instagramUrl],
     priceRange: "₦₦",

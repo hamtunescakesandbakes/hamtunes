@@ -177,19 +177,30 @@ export default function Footer() {
               >
                 <MessageCircle className="w-4 h-4 text-[#F50057] group-hover:text-white transition-colors" />
                 <div>
-                  <div className="text-[11px] text-[#F7EFE8]/70">WhatsApp Orders</div>
-                  <div className="font-semibold">{BRAND.whatsAppDisplay}</div>
+                  <div className="text-[11px] text-[#F7EFE8]/70">Primary Line (WhatsApp & Calls)</div>
+                  <div className="font-semibold">{BRAND.primaryPhoneDisplay}</div>
                 </div>
               </a>
 
               <a
-                href={BRAND.phoneTel}
+                href={BRAND.primaryPhoneTel}
                 className="flex items-center gap-3 p-2.5 rounded-lg bg-[#5A2718]/60 hover:bg-[#F50057] transition-all group"
               >
                 <Phone className="w-4 h-4 text-[#F50057] group-hover:text-white transition-colors" />
                 <div>
-                  <div className="text-[11px] text-[#F7EFE8]/70">Telephone Line</div>
-                  <div className="font-semibold">{BRAND.phoneDisplay}</div>
+                  <div className="text-[11px] text-[#F7EFE8]/70">Direct Call (Primary Line)</div>
+                  <div className="font-semibold">{BRAND.primaryPhoneDisplay}</div>
+                </div>
+              </a>
+
+              <a
+                href={BRAND.secondaryPhoneTel}
+                className="flex items-center gap-3 p-2.5 rounded-lg bg-[#5A2718]/40 hover:bg-[#F50057] transition-all group"
+              >
+                <Phone className="w-4 h-4 text-[#F50057] group-hover:text-white transition-colors" />
+                <div>
+                  <div className="text-[11px] text-[#F7EFE8]/70">Secondary Line (Calls Only)</div>
+                  <div className="font-semibold text-xs text-[#F7EFE8]">{BRAND.secondaryPhoneDisplay}</div>
                 </div>
               </a>
 

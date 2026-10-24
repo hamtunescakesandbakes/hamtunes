@@ -1829,21 +1829,21 @@ export default function AdminPage() {
 
                 <div className="space-y-4 text-xs">
                   <div>
-                    <label className="block font-bold text-[#351207] mb-1">WhatsApp Number</label>
+                    <label className="block font-bold text-[#351207] mb-1">Primary Line (Calls &amp; WhatsApp)</label>
                     <input
                       type="text"
                       disabled
-                      value={BRAND.whatsAppDisplay}
+                      value={BRAND.primaryPhoneDisplay}
                       className="w-full p-2.5 rounded-xl border border-[#E8DDD7] bg-[#F7EFE8] text-[#351207] font-mono"
                     />
                   </div>
 
                   <div>
-                    <label className="block font-bold text-[#351207] mb-1">Telephone Line</label>
+                    <label className="block font-bold text-[#351207] mb-1">Secondary Line (Calls Only)</label>
                     <input
                       type="text"
                       disabled
-                      value={BRAND.phoneDisplay}
+                      value={BRAND.secondaryPhoneDisplay}
                       className="w-full p-2.5 rounded-xl border border-[#E8DDD7] bg-[#F7EFE8] text-[#351207] font-mono"
                     />
                   </div>

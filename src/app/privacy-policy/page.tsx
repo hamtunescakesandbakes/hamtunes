@@ -109,8 +109,8 @@ export default function PrivacyPolicyPage() {
           <div className="p-4 bg-[#FFF9F5] rounded-xl border border-[#E8DDD7] text-xs space-y-1">
             <p><strong>Business:</strong> Hamtunes Cakes & Bakes</p>
             <p><strong>Email:</strong> {BRAND.email}</p>
-            <p><strong>Telephone:</strong> {BRAND.phoneDisplay}</p>
-            <p><strong>WhatsApp:</strong> {BRAND.whatsAppDisplay}</p>
+            <p><strong>Primary Line (Calls &amp; WhatsApp):</strong> {BRAND.primaryPhoneDisplay}</p>
+            <p><strong>Secondary Line (Calls Only):</strong> {BRAND.secondaryPhoneDisplay}</p>
           </div>
         </section>
       </div>

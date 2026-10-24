@@ -12,10 +12,17 @@ export const BRAND = {
   experienceYears: exp.years,
   experienceLabel: exp.experienceLabel,
   businessStartDate: DEFAULT_BUSINESS_START_DATE,
-  phoneDisplay: "0904 957 1104",
-  phoneTel: "tel:09049571104",
+  // Primary Contact: Calls and WhatsApp
+  primaryPhoneDisplay: "0803 397 6589",
+  primaryPhoneTel: "tel:08033976589",
   whatsAppDisplay: "+234 803 397 6589",
   whatsAppNumber: "2348033976589",
+  // Secondary Contact: Direct Calls Only
+  secondaryPhoneDisplay: "0904 957 1104",
+  secondaryPhoneTel: "tel:09049571104",
+  // Default telephone references to Primary Number
+  phoneDisplay: "0803 397 6589",
+  phoneTel: "tel:08033976589",
   email: "hamtunescakesandbakes89@gmail.com",
   emailMailto: "mailto:hamtunescakesandbakes89@gmail.com",
   instagramHandle: "@hamtunescakes",

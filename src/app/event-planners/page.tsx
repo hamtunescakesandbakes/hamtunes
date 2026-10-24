@@ -201,8 +201,9 @@ export default function EventPlannersPage() {
               Clear Communication & Coordination
             </h3>
             <p className="text-xs text-[#6F625C] leading-relaxed">
-              Direct access to our lead baker via phone and WhatsApp ensures design alignment, prompt
-              updates, and flexible event coordination.
+              Direct access to our lead baker via primary line ({BRAND.primaryPhoneDisplay} for Calls &amp; WhatsApp)
+              or our secondary call line ({BRAND.secondaryPhoneDisplay} Calls Only) ensures seamless design alignment,
+              tasting sessions, and punctual event coordination.
             </p>
           </div>
         </div>

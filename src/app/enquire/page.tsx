@@ -210,44 +210,57 @@ function EnquireContent() {
 
       {/* 2. DIRECT CONTACT CHANNELS */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3.5">
           <a
             href={directWhatsApp}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-5 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#25D366] hover:shadow-md transition-all flex items-center gap-4 group"
+            className="p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#25D366] hover:shadow-md transition-all flex items-center gap-3.5 group"
           >
-            <div className="w-12 h-12 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center group-hover:scale-110 transition-transform">
-              <MessageCircle className="w-6 h-6 fill-[#25D366] text-white" />
+            <div className="w-11 h-11 rounded-xl bg-[#25D366]/10 text-[#25D366] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+              <MessageCircle className="w-5 h-5 fill-[#25D366] text-white" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase text-[#6F625C]">Direct WhatsApp</div>
-              <div className="font-semibold text-sm text-[#351207]">{BRAND.whatsAppDisplay}</div>
+              <div className="text-[10px] font-bold uppercase text-[#6F625C]">Primary WhatsApp</div>
+              <div className="font-semibold text-xs sm:text-sm text-[#351207]">{BRAND.primaryPhoneDisplay}</div>
             </div>
           </a>
 
           <a
-            href={BRAND.phoneTel}
-            className="p-5 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-4 group"
+            href={BRAND.primaryPhoneTel}
+            className="p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-3.5 group"
           >
-            <div className="w-12 h-12 rounded-xl bg-[#FFF0F5] text-[#F50057] flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Phone className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-[#FFF0F5] text-[#F50057] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+              <Phone className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase text-[#6F625C]">Telephone Line</div>
-              <div className="font-semibold text-sm text-[#351207]">{BRAND.phoneDisplay}</div>
+              <div className="text-[10px] font-bold uppercase text-[#6F625C]">Primary Call Line</div>
+              <div className="font-semibold text-xs sm:text-sm text-[#351207]">{BRAND.primaryPhoneDisplay}</div>
+            </div>
+          </a>
+
+          <a
+            href={BRAND.secondaryPhoneTel}
+            className="p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-3.5 group"
+          >
+            <div className="w-11 h-11 rounded-xl bg-[#F7EFE8] text-[#6F625C] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+              <Phone className="w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-[10px] font-bold uppercase text-[#6F625C]">Secondary (Calls Only)</div>
+              <div className="font-semibold text-xs sm:text-sm text-[#351207]">{BRAND.secondaryPhoneDisplay}</div>
             </div>
           </a>
 
           <a
             href={BRAND.emailMailto}
-            className="p-5 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-4 group"
+            className="p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-3.5 group"
           >
-            <div className="w-12 h-12 rounded-xl bg-[#FFF0F5] text-[#F50057] flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Mail className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-[#FFF0F5] text-[#F50057] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+              <Mail className="w-5 h-5" />
             </div>
             <div className="overflow-hidden">
-              <div className="text-[11px] font-bold uppercase text-[#6F625C]">Email Us</div>
+              <div className="text-[10px] font-bold uppercase text-[#6F625C]">Email Us</div>
               <div className="font-semibold text-xs text-[#351207] truncate">{BRAND.email}</div>
             </div>
           </a>
@@ -256,14 +269,14 @@ function EnquireContent() {
             href={BRAND.instagramUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="p-5 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-4 group"
+            className="p-4 rounded-2xl bg-[#FFFFFF] border border-[#E8DDD7] hover:border-[#F50057] hover:shadow-md transition-all flex items-center gap-3.5 group"
           >
-            <div className="w-12 h-12 rounded-xl bg-[#FFF0F5] text-[#F50057] flex items-center justify-center group-hover:scale-110 transition-transform">
-              <InstagramIcon className="w-6 h-6" />
+            <div className="w-11 h-11 rounded-xl bg-[#FFF0F5] text-[#F50057] flex items-center justify-center group-hover:scale-110 transition-transform flex-shrink-0">
+              <InstagramIcon className="w-5 h-5" />
             </div>
             <div>
-              <div className="text-[11px] font-bold uppercase text-[#6F625C]">Instagram</div>
-              <div className="font-semibold text-sm text-[#351207]">{BRAND.instagramHandle}</div>
+              <div className="text-[10px] font-bold uppercase text-[#6F625C]">Instagram</div>
+              <div className="font-semibold text-xs sm:text-sm text-[#351207]">{BRAND.instagramHandle}</div>
             </div>
           </a>
         </div>

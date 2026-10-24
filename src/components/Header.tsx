@@ -30,10 +30,19 @@ export default function Header() {
         <span>Hamtunes Cakes &amp; Bakes — Celebrating {BRAND.experienceYears} Years of Handcrafted Excellence</span>
         <span className="hidden sm:inline opacity-70">|</span>
         <a
-          href={BRAND.phoneTel}
+          href={BRAND.primaryPhoneTel}
           className="hidden sm:inline hover:text-[#F50057] transition-colors"
+          title="Primary: Calls & WhatsApp"
         >
-          Call: {BRAND.phoneDisplay}
+          Call / WhatsApp: {BRAND.primaryPhoneDisplay}
+        </a>
+        <span className="hidden md:inline opacity-70">|</span>
+        <a
+          href={BRAND.secondaryPhoneTel}
+          className="hidden md:inline hover:text-[#F50057] transition-colors opacity-80"
+          title="Secondary: Calls Only"
+        >
+          Call Only: {BRAND.secondaryPhoneDisplay}
         </a>
       </div>
 
@@ -156,14 +165,21 @@ export default function Header() {
               className="flex items-center justify-center gap-2 w-full bg-[#F50057] text-white font-semibold py-3 rounded-lg shadow-sm"
             >
               <MessageCircle className="w-5 h-5 fill-white text-[#F50057]" />
-              <span>Chat on WhatsApp (+234 803 397 6589)</span>
+              <span>Chat on WhatsApp ({BRAND.primaryPhoneDisplay})</span>
             </a>
             <a
-              href={BRAND.phoneTel}
+              href={BRAND.primaryPhoneTel}
               className="flex items-center justify-center gap-2 w-full bg-[#F7EFE8] text-[#351207] font-semibold py-2.5 rounded-lg border border-[#E8DDD7]"
             >
               <Phone className="w-4 h-4 text-[#F50057]" />
-              <span>Call 0904 957 1104</span>
+              <span>Call Primary ({BRAND.primaryPhoneDisplay})</span>
+            </a>
+            <a
+              href={BRAND.secondaryPhoneTel}
+              className="flex items-center justify-center gap-2 w-full bg-white text-[#6F625C] text-xs font-semibold py-2 rounded-lg border border-[#E8DDD7]"
+            >
+              <Phone className="w-3.5 h-3.5 text-[#6F625C]" />
+              <span>Call Secondary ({BRAND.secondaryPhoneDisplay} — Calls Only)</span>
             </a>
           </div>
         </div>
