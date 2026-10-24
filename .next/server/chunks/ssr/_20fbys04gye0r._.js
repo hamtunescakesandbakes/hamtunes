@@ -1,0 +1,8 @@
+(()=>{"use strict";module.exports=[33354,(a,b,c)=>{c._=function(a){return a&&a.__esModule?a:{default:a}}},74215,a=>{var b=a.i(64831);let c={name:"x",size:24,node:[["path",{d:"M18 6 6 18",key:"1bl5f8"}],["path",{d:"m6 6 12 12",key:"d8bk6v"}]]};c.node;let d=(0,b.f)(c);a.s(["X",0,d],74215)},69789,(a,b,c)=>{Object.defineProperty(c,"__esModule",{value:!0});var d={actionAsyncStorage:function(){return f.actionAsyncStorage},workAsyncStorage:function(){return g.workAsyncStorage},workUnitAsyncStorage:function(){return h.workUnitAsyncStorage}};for(var e in d)Object.defineProperty(c,e,{enumerable:!0,get:d[e]});let f=a.r(20635),g=a.r(56704),h=a.r(32319);("function"==typeof c.default||"object"==typeof c.default&&null!==c.default)&&void 0===c.default.__esModule&&(Object.defineProperty(c.default,"__esModule",{value:!0}),Object.assign(c.default,c),b.exports=c.default)},56741,a=>{var b=a.i(21007);function c(a,c){let d=(c||b.P.whatsAppNumber).replace(/\D/g,""),e=encodeURIComponent(a.trim());return`https://wa.me/${d}?text=${e}`}a.s(["O",0,function(){return c(`👋 Hello Hamtunes Cakes & Bakes! I am an event planner and would love to discuss sourcing cakes, pastries, and small chops for upcoming client events.`)},"F",0,function(){return c(`👋 Hello Hamtunes Cakes & Bakes! I would like to make an enquiry about your cakes and baked goods.`)},"R",0,function(a,b){return c(`👋 Hello Hamtunes Cakes & Bakes!
+
+I was browsing your website and I'm interested in enquiring about:
+*${a}* (${b}).
+
+Please let me know your current availability and options for ordering. Thank you!`)},"M",0,c])}]})();
+
+//# sourceMappingURL=_20fbys04gye0r._.js.map
