@@ -19,44 +19,74 @@ const serifFont = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hamtunescakes.com"),
-  title: "Hamtunes Cakes & Bakes | Handcrafted Cakes, Pastries & Small Chops in Nigeria",
+  metadataBase: new URL(BRAND.siteUrl),
+  title: {
+    default: "Hamtunes Cakes & Bakes | Premium Cakes & Baked Goods",
+    template: "%s | Hamtunes Cakes & Bakes",
+  },
   description:
-    "Celebrating 16 years of baking mastery. Bespoke birthday cakes, thoughtful gifting cakes, cultural celebrations, fluffy doughnuts, savory meat pies, and authentic Nigerian small chops.",
+    "Discover Hamtunes Cakes & Bakes, creating celebration cakes, personalised gifting cakes, pastries, and small chops. Explore our collection and enquire about your order.",
   keywords: [
-    "Hamtunes Cakes & Bakes",
+    "Hamtunes",
     "Hamtunes Cakes",
+    "Hamtunes Cakes and Bakes",
+    "Hamtunes Cakes & Bakes",
+    "Hamtunes Bakery",
+    "Hamtunes birthday cakes",
+    "Hamtunes custom cakes",
+    "Hamtunes cakes in Lagos",
     "Birthday cakes Nigeria",
     "Cakes for gifting",
     "Custom celebration cakes",
+    "Hamtunes baked goods",
     "Doughnuts",
     "Cupcakes",
     "Meat pies",
+    "Egg rolls",
     "Sausage rolls",
     "Small chops",
-    "Event party catering",
+    "Lagos bakery and confectionery",
   ],
   authors: [{ name: "Hamtunes Cakes & Bakes" }],
+  creator: "Hamtunes Cakes & Bakes",
+  publisher: "Hamtunes Cakes & Bakes",
+  alternates: {
+    canonical: BRAND.siteUrl,
+  },
   openGraph: {
-    title: "Hamtunes Cakes & Bakes | 16 Years of Handcrafted Baking Excellence",
+    title: "Hamtunes Cakes & Bakes | Premium Cakes & Baked Goods",
     description:
-      "Handcrafted celebration cakes, mini gifting cakes, fresh pastries, and authentic Nigerian small chops made for your special moments.",
-    url: "https://hamtunescakes.com",
+      "Discover Hamtunes Cakes & Bakes, creating celebration cakes, personalised gifting cakes, pastries, and small chops. Explore our collection and enquire about your order.",
+    url: BRAND.siteUrl,
     siteName: "Hamtunes Cakes & Bakes",
     images: [
       {
         url: "/images/logo.png",
         width: 1200,
         height: 1200,
-        alt: "Hamtunes Cakes & Bakes Logo",
+        alt: "Hamtunes Cakes & Bakes Official Logo",
       },
     ],
     locale: "en_NG",
     type: "website",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hamtunes Cakes & Bakes | Premium Cakes & Baked Goods",
+    description:
+      "Discover Hamtunes Cakes & Bakes, creating celebration cakes, personalised gifting cakes, pastries, and small chops. Explore our collection and enquire about your order.",
+    images: ["/images/logo.png"],
+  },
   robots: {
     index: true,
     follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
   },
 };
 
@@ -67,16 +97,67 @@ export default function RootLayout({
 }>) {
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Bakery",
+    "@type": ["Bakery", "LocalBusiness", "Organization"],
     name: BRAND.name,
+    legalName: BRAND.legalName,
+    alternateName: [
+      "Hamtunes",
+      "Hamtunes Cakes",
+      "Hamtunes Cakes and Bakes",
+      "Hamtunes Bakery",
+      "Hamtunes Lagos",
+    ],
     description:
-      "Established Nigerian baking business with 16 years of experience offering custom celebration cakes, gifting cakes, pastries, and authentic party small chops.",
+      `Discover Hamtunes Cakes & Bakes, creating celebration cakes, personalised gifting cakes, pastries, and small chops with ${BRAND.experienceYears} years of Nigerian baking mastery.`,
+    url: BRAND.siteUrl,
+    logo: `${BRAND.siteUrl}/images/logo.png`,
+    image: [
+      `${BRAND.siteUrl}/images/logo.png`,
+      `${BRAND.siteUrl}/images/owner.jpg`,
+    ],
     telephone: BRAND.phoneDisplay,
     email: BRAND.email,
-    url: "https://hamtunescakes.com",
     sameAs: [BRAND.instagramUrl],
-    priceRange: "$$",
-    servesCuisine: "Nigerian Bakery, Pastries & Celebration Cakes",
+    priceRange: "₦₦",
+    servesCuisine: [
+      "Bakery",
+      "Celebration Cakes",
+      "Confectionery",
+      "Nigerian Small Chops",
+      "Pastries",
+    ],
+    areaServed: [
+      {
+        "@type": "City",
+        name: "Lagos",
+      },
+      {
+        "@type": "Country",
+        name: "Nigeria",
+      },
+    ],
+    hasOfferCatalog: {
+      "@type": "OfferCatalog",
+      name: "Hamtunes Products & Catering Services",
+      itemListElement: [
+        {
+          "@type": "OfferCatalog",
+          name: "Celebration & Custom Cakes",
+        },
+        {
+          "@type": "OfferCatalog",
+          name: "Gifting & Mini Cakes",
+        },
+        {
+          "@type": "OfferCatalog",
+          name: "Fresh Pastries & Doughnuts",
+        },
+        {
+          "@type": "OfferCatalog",
+          name: "Savory Small Chops & Event Platters",
+        },
+      ],
+    },
   };
 
   return (

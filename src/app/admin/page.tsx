@@ -464,7 +464,7 @@ export default function AdminPage() {
           </form>
 
           <p className="text-[11px] text-[#6F625C] text-center">
-            Official Hamtunes Administration System • 16 Years of Baking
+            Official Hamtunes Administration System • {BRAND.experienceYears} Years of Baking
           </p>
         </div>
       </div>
@@ -486,7 +486,7 @@ export default function AdminPage() {
                 Hamtunes Admin Portal
               </div>
               <div className="text-[11px] text-[#F7EFE8]/70">
-                16-Year Operating Business Dashboard
+                {BRAND.experienceYears} Operating Business Dashboard
               </div>
             </div>
           </div>
@@ -635,7 +635,7 @@ export default function AdminPage() {
                             {pendingPricesCount} Product Prices Awaiting Owner Review
                           </h3>
                           <p className="text-xs text-[#6F625C] leading-relaxed">
-                            Following the 16-year brand guideline, newly synced items have preliminary market benchmarks that are marked as <strong>Pending Owner Approval</strong>. While pending, the public website displays &ldquo;Custom Quote&rdquo; or &ldquo;Price on Consultation&rdquo; so customers never see unapproved prices.
+                            Following the {BRAND.experienceYears} brand guideline, newly synced items have preliminary market benchmarks that are marked as <strong>Pending Owner Approval</strong>. While pending, the public website displays &ldquo;Custom Quote&rdquo; or &ldquo;Price on Consultation&rdquo; so customers never see unapproved prices.
                           </p>
                         </div>
                       </div>

@@ -27,7 +27,7 @@ export default function Header() {
       {/* Top experience micro-banner */}
       <div className="bg-[#351207] text-[#FFF9F5] text-xs py-1.5 px-4 text-center font-medium flex items-center justify-center gap-2">
         <Sparkles className="w-3.5 h-3.5 text-[#F50057]" />
-        <span>Hamtunes Cakes & Bakes — Celebrating 16 Years of Handcrafted Excellence</span>
+        <span>Hamtunes Cakes &amp; Bakes — Celebrating {BRAND.experienceYears} Years of Handcrafted Excellence</span>
         <span className="hidden sm:inline opacity-70">|</span>
         <a
           href={BRAND.phoneTel}
@@ -44,7 +44,7 @@ export default function Header() {
             <div className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#F50057] shadow-sm group-hover:scale-105 transition-transform bg-[#FFF9F5]">
               <Image
                 src="/images/logo.png"
-                alt="Hamtunes Cakes and Bakes Logo"
+                alt="Hamtunes Cakes & Bakes Official Logo"
                 fill
                 className="object-cover"
                 priority
@@ -129,7 +129,7 @@ export default function Header() {
 
       {/* Mobile Drawer */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-[#FFFFFF] border-b border-[#E8DDD7] px-4 pt-2 pb-6 space-y-2 shadow-lg animate-in slide-in-from-top-2">
+        <div className="lg:hidden bg-[#FFFFFF] border-b border-[#E8DDD7] px-4 pt-2 pb-6 space-y-2 shadow-xl animate-fade-in-up">
           {navLinks.map((link) => {
             const isActive = pathname === link.href;
             return (

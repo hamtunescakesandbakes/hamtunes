@@ -1,12 +1,13 @@
 import { MetadataRoute } from "next";
+import { BRAND } from "@/lib/constants";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
-      disallow: ["/admin", "/api/"],
+      disallow: ["/admin", "/admin/", "/api/"],
     },
-    sitemap: "https://hamtunescakes.com/sitemap.xml",
+    sitemap: `${BRAND.siteUrl}/sitemap.xml`,
   };
 }

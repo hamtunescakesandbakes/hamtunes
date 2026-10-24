@@ -12,7 +12,7 @@ import {
   CheckCircle,
   HelpCircle,
 } from "lucide-react";
-import { CAKE_CATEGORIES } from "@/lib/constants";
+import { CAKE_CATEGORIES, BRAND } from "@/lib/constants";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import ProductCard from "@/components/ProductCard";
 import ImageGalleryModal from "@/components/ImageGalleryModal";
@@ -25,6 +25,7 @@ export default function CakesPage() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [quickViewProduct, setQuickViewProduct] = useState<Product | null>(null);
+  const [otherCakeSpecification, setOtherCakeSpecification] = useState("");
 
   React.useEffect(() => {
     fetch("/api/products?division=cakes")
@@ -41,7 +42,9 @@ export default function CakesPage() {
   const filteredProducts = useMemo(() => {
     return products.filter((p) => {
       const matchesCategory =
-        selectedCategory === "all" || p.category === selectedCategory;
+        selectedCategory === "all" ||
+        p.category === selectedCategory ||
+        (selectedCategory === "other" && (p.category === "custom_cakes" || p.tags.includes("Custom")));
       const matchesSearch =
         !searchQuery ||
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -60,18 +63,18 @@ export default function CakesPage() {
       {/* 1. HERO */}
       <section className="bg-gradient-to-b from-[#FFF9F5] to-[#FFFFFF] py-16 border-b border-[#E8DDD7]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-4">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF0F5] text-[#F50057] text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF0F5] text-[#F50057] text-xs font-bold uppercase tracking-wider animate-fade-in">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Division A: Handcrafted Celebration Cakes</span>
           </div>
 
-          <h1 className="font-serif font-black text-3xl sm:text-5xl text-[#351207]">
-            Cakes for Every Celebration
+          <h1 className="font-serif font-black text-3xl sm:text-5xl text-[#351207] animate-fade-in-up">
+            Hamtunes Celebration &amp; Custom Cakes
           </h1>
 
-          <p className="text-base sm:text-lg text-[#6F625C] max-w-2xl mx-auto leading-relaxed">
-            Explore birthday cakes, thoughtful gifting cakes, cultural celebration cakes, and
-            custom cakes for occasions worth remembering.
+          <p className="text-base sm:text-lg text-[#6F625C] max-w-3xl mx-auto leading-relaxed animate-fade-in-up stagger-1">
+            Discover bespoke birthday cakes, personalised cakes for gifting, cultural celebration centerpieces,
+            and custom occasion cakes handcrafted by Hamtunes Cakes &amp; Bakes with {BRAND.experienceYears} years of Nigerian baking craft.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -157,6 +160,38 @@ export default function CakesPage() {
               );
             })}
           </div>
+
+          {/* Dynamic "Other" Specification Field */}
+          {selectedCategory === "other" && (
+            <div className="pt-2 border-t border-[#E8DDD7] animate-fade-in-up">
+              <div className="p-4 rounded-xl bg-[#FFF9F5] border border-[#F50057]/30 space-y-2">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-[#F50057]">
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Custom Cake Concept</span>
+                </div>
+                <label className="block text-xs font-bold text-[#351207]">
+                  Please tell us what you have in mind <span className="text-[#F50057]">*</span>
+                </label>
+                <div className="flex flex-col sm:flex-row gap-2.5">
+                  <input
+                    type="text"
+                    required
+                    value={otherCakeSpecification}
+                    onChange={(e) => setOtherCakeSpecification(e.target.value)}
+                    placeholder="e.g., 3-tier emerald green wedding cake with gold leaf, bespoke cartoon theme, etc."
+                    className="flex-1 px-3.5 py-2 rounded-lg border border-[#E8DDD7] text-sm focus:outline-none focus:border-[#F50057] bg-white"
+                  />
+                  <Link
+                    href={`/enquire?type=cake&notes=${encodeURIComponent(otherCakeSpecification || "Bespoke custom cake design")}`}
+                    className="inline-flex items-center justify-center gap-1.5 bg-[#F50057] hover:bg-[#D5004C] text-white text-xs font-bold px-5 py-2.5 rounded-lg transition-all shadow-xs shrink-0"
+                  >
+                    <span>Proceed to Enquiry</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -222,7 +257,7 @@ export default function CakesPage() {
             <p className="text-sm text-[#F7EFE8]/80 leading-relaxed">
               Wedding cakes, engagement tiers, milestone anniversaries, and intricate cartoon themes
               can all be created according to your exact specifications. Even if your preferred style
-              isn&apos;t shown above, our 16-year seasoned baker can bring your vision to life.
+              isn&apos;t shown above, our {BRAND.experienceYears}-year seasoned baker can bring your vision to life.
             </p>
             <div className="pt-2 flex flex-wrap items-center gap-4">
               <Link
@@ -284,7 +319,7 @@ export default function CakesPage() {
             </div>
             <h3 className="font-serif font-bold text-base text-[#351207]">Freshly Baked</h3>
             <p className="text-xs text-[#6F625C] leading-relaxed">
-              Your cake is handcrafted and freshly baked with 16 years of expertise to ensure unmatched taste and presentation.
+              Your cake is handcrafted and freshly baked with {BRAND.experienceYears} years of expertise to ensure unmatched taste and presentation.
             </p>
           </div>
 

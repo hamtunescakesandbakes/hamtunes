@@ -38,6 +38,7 @@ export function generateWhatsAppEnquiryMessage(enquiry: Partial<Enquiry>): strin
     bakes_and_small_chops: "Bakes & Small Chops Order",
     event: "Event & Party Catering",
     event_planner: "Event Planner Partnership",
+    other: "Bespoke / Custom Order",
   };
 
   if (enquiry.enquiry_type) {

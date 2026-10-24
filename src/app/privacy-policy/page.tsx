@@ -1,7 +1,22 @@
 import React from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { ShieldCheck, ArrowLeft, Lock } from "lucide-react";
 import { BRAND } from "@/lib/constants";
+import { formatLagosMonthYear } from "@/lib/dates";
+
+export const metadata: Metadata = {
+  title: "Privacy Policy | Hamtunes Cakes & Bakes",
+  description:
+    "Privacy Policy for Hamtunes Cakes & Bakes. Learn how we handle customer order information, enquiry details, and protect customer data.",
+  alternates: {
+    canonical: `${BRAND.siteUrl}/privacy-policy`,
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 export default function PrivacyPolicyPage() {
   return (
@@ -22,7 +37,7 @@ export default function PrivacyPolicyPage() {
         <h1 className="font-serif font-black text-3xl sm:text-4xl text-[#351207]">
           Privacy Policy
         </h1>
-        <p className="text-xs text-[#6F625C]">Last updated: October 2026</p>
+        <p className="text-xs text-[#6F625C]">Last updated: {formatLagosMonthYear()}</p>
       </div>
 
       <div className="prose prose-stone text-sm text-[#6F625C] space-y-6 leading-relaxed">

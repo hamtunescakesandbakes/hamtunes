@@ -1,4 +1,5 @@
 import React from "react";
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -19,6 +20,44 @@ import OccasionDiscovery from "@/components/OccasionDiscovery";
 import FaqAccordion from "@/components/FaqAccordion";
 
 export const revalidate = 60; // Incremental Static Regeneration
+
+export const metadata: Metadata = {
+  title: "Hamtunes Cakes & Bakes | Premium Cakes & Baked Goods",
+  description:
+    "Discover Hamtunes Cakes & Bakes, creating celebration cakes, personalised gifting cakes, pastries, and small chops. Explore our collection and enquire about your order.",
+  alternates: {
+    canonical: BRAND.siteUrl,
+  },
+  keywords: [
+    "Hamtunes",
+    "Hamtunes Cakes",
+    "Hamtunes Cakes and Bakes",
+    "Hamtunes Cakes & Bakes",
+    "Hamtunes Bakery",
+    "Hamtunes birthday cakes",
+    "Hamtunes custom cakes",
+    "Hamtunes cakes in Lagos",
+    "Nigerian bakery",
+    "Lagos cake vendor",
+  ],
+  openGraph: {
+    title: "Hamtunes Cakes & Bakes | Premium Cakes & Baked Goods",
+    description:
+      "Discover Hamtunes Cakes & Bakes, creating celebration cakes, personalised gifting cakes, pastries, and small chops. Explore our collection and enquire about your order.",
+    url: BRAND.siteUrl,
+    siteName: "Hamtunes Cakes & Bakes",
+    images: [
+      {
+        url: "/images/logo.png",
+        width: 1200,
+        height: 1200,
+        alt: "Hamtunes Cakes & Bakes Official Logo",
+      },
+    ],
+    locale: "en_NG",
+    type: "website",
+  },
+};
 
 export default function HomePage() {
   const products = getPublishedProducts();
@@ -44,14 +83,14 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
             {/* Left Content */}
             <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-              {/* 16-Year Heritage Pill */}
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF0F5] border border-[#F50057]/20 text-[#F50057] text-xs font-bold tracking-wide uppercase shadow-xs">
+              {/* Heritage Pill */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#FFF0F5] border border-[#F50057]/20 text-[#F50057] text-xs font-bold tracking-wide uppercase shadow-xs animate-fade-in">
                 <Sparkles className="w-3.5 h-3.5" />
-                <span>16 Years of Nigerian Baking Mastery</span>
+                <span>{BRAND.experienceYears} Years of Nigerian Baking Mastery</span>
               </div>
 
               {/* Suggested Headline */}
-              <h1 className="font-serif font-black text-3xl sm:text-5xl lg:text-6xl text-[#351207] tracking-tight leading-[1.15]">
+              <h1 className="font-serif font-black text-3xl sm:text-5xl lg:text-6xl text-[#351207] tracking-tight leading-[1.15] animate-fade-in-up">
                 Beautiful Cakes.{" "}
                 <span className="text-[#F50057] underline decoration-[#F50057]/30 decoration-wavy decoration-2">
                   Delicious Bakes.
@@ -60,13 +99,13 @@ export default function HomePage() {
               </h1>
 
               {/* Supporting Copy */}
-              <p className="text-base sm:text-lg text-[#6F625C] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal">
+              <p className="text-base sm:text-lg text-[#6F625C] max-w-2xl mx-auto lg:mx-0 leading-relaxed font-normal animate-fade-in-up stagger-1">
                 From birthday cakes and thoughtful gifts to baked treats and authentic small chops,
-                Hamtunes Cakes & Bakes brings 16 years of experience to the moments you want to celebrate.
+                Hamtunes Cakes &amp; Bakes brings {BRAND.experienceYears} years of experience to the moments you want to celebrate.
               </p>
 
               {/* Action Buttons */}
-              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2">
+              <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4 pt-2 animate-fade-in-up stagger-2">
                 <Link
                   href="/cakes"
                   className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-[#F50057] hover:bg-[#D5004C] text-white font-semibold px-7 py-3.5 rounded-full shadow-md hover:shadow-lg transition-all"
@@ -94,11 +133,11 @@ export default function HomePage() {
               </div>
 
               {/* Trust Badges */}
-              <div className="pt-6 grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0 border-t border-[#E8DDD7]/70 text-left">
+              <div className="pt-6 grid grid-cols-3 gap-4 max-w-lg mx-auto lg:mx-0 border-t border-[#E8DDD7]/70 text-left animate-fade-in stagger-3">
                 <div className="flex items-center gap-2.5">
                   <ShieldCheck className="w-5 h-5 text-[#F50057] shrink-0" />
                   <span className="text-xs font-semibold text-[#351207] leading-tight">
-                    16 Years Proven Trust
+                    {BRAND.experienceYears} Years Proven Trust
                   </span>
                 </div>
                 <div className="flex items-center gap-2.5">
@@ -125,7 +164,7 @@ export default function HomePage() {
                 <div className="relative aspect-square w-full rounded-3xl overflow-hidden border-4 border-white shadow-2xl bg-[#FFF9F5]">
                   <Image
                     src={heroImageUrl}
-                    alt="Featured Handcrafted Cake by Hamtunes"
+                    alt="Signature handcrafted celebration cake made by Hamtunes Cakes & Bakes"
                     fill
                     sizes="(max-width: 1024px) 100vw, 50vw"
                     className="object-cover"
@@ -143,7 +182,7 @@ export default function HomePage() {
                       </div>
                     </div>
                     <span className="text-xs font-bold text-[#351207] px-3 py-1 rounded-full bg-[#FFF0F5] border border-[#F50057]/20">
-                      16 Yrs Craft
+                      {BRAND.experienceYears} Yrs Craft
                     </span>
                   </div>
                 </div>
@@ -162,16 +201,16 @@ export default function HomePage() {
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
             {/* Owner Photograph */}
             <div className="lg:col-span-5 order-2 lg:order-1">
-              <div className="relative aspect-[4/5] max-w-sm mx-auto rounded-2xl overflow-hidden border-4 border-[#FFFFFF] shadow-xl bg-[#F7EFE8]">
+              <div className="relative aspect-[4/5] max-w-sm mx-auto rounded-2xl overflow-hidden border-4 border-[#FFFFFF] shadow-xl bg-[#F7EFE8] group">
                 <Image
                   src="/images/owner.jpg"
-                  alt="The experienced baker and founder behind Hamtunes Cakes & Bakes"
+                  alt={`Founder and master baker at Hamtunes Cakes & Bakes with ${BRAND.experienceYears} years of culinary excellence`}
                   fill
-                  className="object-cover"
+                  className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
                 <div className="absolute bottom-3 left-3 right-3 bg-[#351207]/85 backdrop-blur-sm text-white px-4 py-2.5 rounded-xl text-center">
                   <p className="text-xs font-semibold tracking-wide">
-                    16 Years of Heartfelt Baking Craft
+                    {BRAND.experienceYears} Years of Heartfelt Baking Craft
                   </p>
                 </div>
               </div>
@@ -184,13 +223,13 @@ export default function HomePage() {
                   Our Story & Heritage
                 </span>
                 <h2 className="font-serif font-black text-2xl sm:text-4xl text-[#351207]">
-                  16 Years of Baking for Life&apos;s Special Moments
+                  {BRAND.experienceYears} Years of Baking for Life&apos;s Special Moments
                 </h2>
               </div>
 
               <div className="space-y-4 text-sm sm:text-base text-[#6F625C] leading-relaxed">
                 <p>
-                  Behind Hamtunes Cakes & Bakes is a dedicated baker with 16 years of experience creating
+                  Behind Hamtunes Cakes &amp; Bakes is a dedicated baker with {BRAND.experienceYears} years of experience creating
                   cakes and baked treats for diverse occasions. What started with a deep passion for the
                   craft has grown into a trusted destination for milestone birthdays, heartfelt gifts,
                   family gatherings, and festive celebrations.
@@ -400,9 +439,9 @@ export default function HomePage() {
       {/* 9. FINAL CALL TO ACTION */}
       <section className="bg-gradient-to-b from-[#FFF9F5] to-[#FFFFFF] py-16 border-t border-[#E8DDD7]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF0F5] text-[#F50057] text-xs font-bold uppercase tracking-wider">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF0F5] text-[#F50057] text-xs font-bold uppercase tracking-wider animate-pulse-subtle">
             <Sparkles className="w-3.5 h-3.5" />
-            <span>16 Years of Making Moments Sweet</span>
+            <span>{BRAND.experienceYears} Years of Making Moments Sweet</span>
           </div>
 
           <h2 className="font-serif font-black text-3xl sm:text-4xl text-[#351207]">

@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import { ChevronDown } from "lucide-react";
+import { BRAND } from "@/lib/constants";
 
 interface FaqItem {
   question: string;
@@ -14,7 +15,7 @@ const FAQS: FaqItem[] = [
     category: "Cakes",
     question: "What cake varieties and celebrations does Hamtunes cater to?",
     answer:
-      "With 16 years of baking experience, Hamtunes crafts custom birthday cakes, personalized cakes for gifting loved ones, cultural celebration cakes (traditional weddings & introductions), anniversary cakes, graduation cakes, and bespoke centerpieces. Even if you don't see an exact photo of your desired theme in the portfolio, we create custom designs based on your specifications or reference photos.",
+      `With ${BRAND.experienceYears} of baking experience, Hamtunes crafts custom birthday cakes, personalized cakes for gifting loved ones, cultural celebration cakes (traditional weddings & introductions), anniversary cakes, graduation cakes, and bespoke centerpieces. Even if you don't see an exact photo of your desired theme in the portfolio, we create custom designs based on your specifications or reference photos.`,
   },
   {
     category: "Gifting",

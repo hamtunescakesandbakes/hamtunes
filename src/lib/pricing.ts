@@ -221,4 +221,30 @@ export const CATEGORY_PRICING_GUIDELINES: Record<string, CategoryPricingGuidelin
     unitLabel: "event package",
     pricingNotes: "Custom quotation tailored to your guest count, delivery venue, and menu selection.",
   },
+
+  // 11. Nigerian Egg Rolls
+  egg_rolls: {
+    defaultMethod: "quantity_tiers",
+    suggestedUnitCost: 400,
+    suggestedTargetMargin: 0.50,
+    suggestedBasePrice: 800,
+    unitLabel: "piece",
+    defaultTiers: [
+      { quantity: 1, label: "Single Piece", price: 800 },
+      { quantity: 6, label: "Box of 6", price: 4500 },
+      { quantity: 12, label: "Baker's Dozen (12 pcs)", price: 9000 },
+      { quantity: 25, label: "Party Pack (25 pcs)", price: 18500 },
+    ],
+    pricingNotes: "Freshly fried with whole seasoned boiled eggs wrapped in crisp golden crust.",
+  },
+
+  // 12. Other / Bespoke Orders
+  other: {
+    defaultMethod: "quote_only",
+    suggestedUnitCost: 15000,
+    suggestedTargetMargin: 0.50,
+    suggestedBasePrice: 30000,
+    unitLabel: "custom order",
+    pricingNotes: "Bespoke quotation based on your custom requirements, portions, and theme.",
+  },
 };

@@ -6,6 +6,7 @@ import { X, MessageCircle, Tag, Info, Check } from "lucide-react";
 import { Product } from "@/lib/types";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
 import { getProductDisplayPrice, formatNaira } from "@/lib/pricing";
+import { BRAND } from "@/lib/constants";
 
 interface ImageGalleryModalProps {
   product: Product | null;
@@ -98,7 +99,7 @@ export default function ImageGalleryModal({ product, onClose }: ImageGalleryModa
               <Info className="w-3.5 h-3.5 text-[#F50057] shrink-0 mt-0.5" />
               <span>
                 {product.division === "cakes"
-                  ? "Final quote depends on confirmed cake size, tier structure, custom artwork, and delivery venue. Savor freshly baked goodness crafted with 16 years of expertise."
+                  ? `Final quote depends on confirmed cake size, tier structure, custom artwork, and delivery venue. Savor freshly baked goodness crafted with ${BRAND.experienceYears} of expertise.`
                   : "Baked treats are prepared fresh daily. Bulk discounts and custom party platter packaging available upon consultation."}
               </span>
             </div>
@@ -112,7 +113,7 @@ export default function ImageGalleryModal({ product, onClose }: ImageGalleryModa
           {/* Action Row */}
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-2">
             <span className="text-xs font-semibold text-[#351207]">
-              16 Years of Nigerian Baking Mastery
+              {BRAND.experienceYears} of Nigerian Baking Mastery
             </span>
 
             <a

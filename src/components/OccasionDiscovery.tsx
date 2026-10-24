@@ -1,6 +1,9 @@
 import React from "react";
 import Link from "next/link";
-import { Cake, Gift, Users, Coffee, PartyPopper, Sparkles, ArrowRight } from "lucide-react";
+import { Cake, Gift, Users, Coffee, PartyPopper, Sparkles, HelpCircle, ArrowRight } from "lucide-react";
+import { getBakingExperience } from "@/lib/dates";
+
+const exp = getBakingExperience();
 
 const OCCASIONS = [
   {
@@ -49,7 +52,15 @@ const OCCASIONS = [
     subtitle: "Upload your design reference or share your vision with us.",
     href: "/enquire?type=cake",
     icon: Sparkles,
-    badge: "16 Yrs Experience",
+    badge: exp.short,
+  },
+  {
+    id: "other",
+    title: "Other / Bespoke Request",
+    subtitle: "Have a unique idea or custom request? Tell us what you have in mind.",
+    href: "/enquire?type=other",
+    icon: HelpCircle,
+    badge: "Custom Order",
   },
 ];
 

@@ -1,4 +1,5 @@
 import { Division } from "../types";
+import { BRAND } from "../constants";
 
 export interface ClassificationResult {
   division: Division;
@@ -35,7 +36,7 @@ export function classifyImage(filename: string, folderName: string): Classificat
       suggested_category: "owner_portrait",
       confidence_score: 0.99,
       caption: "The Baker & Founder of Hamtunes Cakes & Bakes",
-      alt_text: "The experienced baker and founder behind Hamtunes Cakes & Bakes with 16 years of craft",
+      alt_text: `The experienced baker and founder behind Hamtunes Cakes & Bakes with ${BRAND.experienceYears} of craft`,
       is_brand_asset: true,
       notes: "Detected as founder/baker brand photography. Displayed in introduction & about sections, not product catalogue.",
     };
@@ -127,6 +128,14 @@ export function classifyImage(filename: string, folderName: string): Classificat
     bakesCategory = "sausage_rolls";
     caption = "Golden Crisp Sausage Rolls";
     alt = "Freshly baked golden sausage rolls with seasoned savory filling by Hamtunes";
+  } else if (
+    lowerName.includes("egg roll") ||
+    lowerName.includes("eggroll") ||
+    lowerName.includes("fried dough")
+  ) {
+    bakesCategory = "egg_rolls";
+    caption = "Fresh Golden Nigerian Egg Rolls";
+    alt = "Fresh golden Nigerian egg rolls handcrafted by Hamtunes Cakes & Bakes";
   } else if (
     lowerName.includes("snack") ||
     lowerName.includes("fried dough") ||

@@ -15,10 +15,12 @@ import {
   Cake,
   Coffee,
   Users,
+  HelpCircle,
 } from "lucide-react";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { BRAND } from "@/lib/constants";
 import { buildWhatsAppLink } from "@/lib/whatsapp";
+import { getMinOrderDate } from "@/lib/dates";
 
 function EnquireContent() {
   const searchParams = useSearchParams();
@@ -33,6 +35,11 @@ function EnquireContent() {
   const [collectionDelivery, setCollectionDelivery] = useState("undecided");
   const [details, setDetails] = useState("");
   const [selectedProduct, setSelectedProduct] = useState("");
+
+  // "Other" specification states
+  const [otherEnquirySpecification, setOtherEnquirySpecification] = useState("");
+  const [otherFulfillmentSpecification, setOtherFulfillmentSpecification] = useState("");
+  const [otherBudgetSpecification, setOtherBudgetSpecification] = useState("");
 
   const [referenceFile, setReferenceFile] = useState<File | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
@@ -94,21 +101,64 @@ function EnquireContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
+
+    // Validate Other fields if selected
+    if (enquiryType === "other" && !otherEnquirySpecification.trim()) {
+      setErrorMsg("Please tell us what you have in mind for your enquiry.");
+      return;
+    }
+    if (collectionDelivery === "other" && !otherFulfillmentSpecification.trim()) {
+      setErrorMsg("Please tell us your preferred fulfillment details.");
+      return;
+    }
+    if (budget === "other" && !otherBudgetSpecification.trim()) {
+      setErrorMsg("Please enter your estimated budget amount or requirements.");
+      return;
+    }
+
     setSubmitting(true);
 
     try {
+      // Assemble detailed notes with custom specifications
+      const notesParts = [
+        details.trim(),
+        enquiryType === "other" && otherEnquirySpecification.trim()
+          ? `[Custom Enquiry Focus: ${otherEnquirySpecification.trim()}]`
+          : null,
+        collectionDelivery === "other" && otherFulfillmentSpecification.trim()
+          ? `[Custom Fulfillment: ${otherFulfillmentSpecification.trim()}]`
+          : null,
+        budget === "other" && otherBudgetSpecification.trim()
+          ? `[Custom Budget: ${otherBudgetSpecification.trim()}]`
+          : null,
+      ]
+        .filter(Boolean)
+        .join("\n");
+
+      const finalBudget =
+        budget === "other"
+          ? otherBudgetSpecification.trim() || "Custom / Other"
+          : budget || undefined;
+
+      const finalFulfillment =
+        collectionDelivery === "other"
+          ? `other (${otherFulfillmentSpecification.trim() || "Bespoke"})`
+          : collectionDelivery;
+
       const payload = {
         customer_name: customerName,
         phone_number: phoneNumber,
         email,
         enquiry_type: enquiryType,
-        products_interested: selectedProduct || undefined,
+        products_interested:
+          selectedProduct ||
+          (enquiryType === "other" ? otherEnquirySpecification.trim() : undefined),
         event_date: eventDate || undefined,
         cake_size_or_quantity: cakeSize || undefined,
-        design_notes: details || undefined,
-        budget_range: budget || undefined,
+        design_notes: notesParts || undefined,
+        budget_range: finalBudget,
         reference_image_url: referenceImageUrl || undefined,
-        collection_or_delivery: collectionDelivery,
+        collection_or_delivery: finalFulfillment,
       };
 
       const res = await fetch("/api/enquiries", {
@@ -148,12 +198,12 @@ function EnquireContent() {
           </div>
 
           <h1 className="font-serif font-black text-3xl sm:text-5xl text-[#351207]">
-            Make an Enquiry with Hamtunes
+            Make an Enquiry with Hamtunes Cakes &amp; Bakes
           </h1>
 
           <p className="text-base sm:text-lg text-[#6F625C] max-w-2xl mx-auto leading-relaxed">
-            Whether you need a custom celebration cake, personalized gift, or fresh small chops for a
-            party, we are here to bring 16 years of baking experience to your special occasion.
+            Whether you need a custom celebration cake, personalized gifting cake, or fresh baked goods and savory small chops for an event,
+            Hamtunes Cakes &amp; Bakes brings {BRAND.experienceYears} years of Nigerian baking mastery to your special occasion in Lagos.
           </p>
         </div>
       </section>
@@ -286,12 +336,13 @@ function EnquireContent() {
                 <label className="block text-xs font-bold text-[#351207] mb-2">
                   What are you enquiring about?
                 </label>
-                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
                   {[
                     { id: "cake", label: "Celebration Cake", icon: Cake },
                     { id: "gifting_cake", label: "Gift / Mini Cake", icon: Sparkles },
                     { id: "bakes_and_small_chops", label: "Bakes & Small Chops", icon: Coffee },
                     { id: "event", label: "Event Catering", icon: Users },
+                    { id: "other", label: "Other", icon: HelpCircle },
                   ].map((tab) => {
                     const active = enquiryType === tab.id;
                     const Icon = tab.icon;
@@ -312,6 +363,22 @@ function EnquireContent() {
                     );
                   })}
                 </div>
+
+                {enquiryType === "other" && (
+                  <div className="mt-3 p-4 rounded-2xl bg-[#FFF9F5] border border-[#F50057]/30 animate-fade-in-up space-y-1.5">
+                    <label className="block text-xs font-bold text-[#351207]">
+                      Please tell us what you have in mind <span className="text-[#F50057]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="Describe your custom cake, baked treats, dessert table, or bespoke enquiry..."
+                      value={otherEnquirySpecification}
+                      onChange={(e) => setOtherEnquirySpecification(e.target.value)}
+                      className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DDD7] text-sm focus:outline-none focus:border-[#F50057] bg-white"
+                    />
+                  </div>
+                )}
               </div>
 
               {/* Customer Contact */}
@@ -352,6 +419,7 @@ function EnquireContent() {
                   </label>
                   <input
                     type="date"
+                    min={getMinOrderDate(2)}
                     value={eventDate}
                     onChange={(e) => setEventDate(e.target.value)}
                     className="w-full px-3.5 py-2.5 rounded-xl border border-[#E8DDD7] text-sm focus:outline-none focus:border-[#F50057]"
@@ -386,7 +454,24 @@ function EnquireContent() {
                     <option value="undecided">Undecided / Discuss with Baker</option>
                     <option value="delivery">Delivery to Venue / Address</option>
                     <option value="collection">Self-Pickup / Collection</option>
+                    <option value="other">Other Fulfillment (Specify)</option>
                   </select>
+
+                  {collectionDelivery === "other" && (
+                    <div className="mt-2.5 p-3 rounded-xl bg-[#FFF9F5] border border-[#F50057]/30 animate-fade-in-up space-y-1">
+                      <label className="block text-[11px] font-bold text-[#351207]">
+                        Please tell us what you have in mind <span className="text-[#F50057]">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g., Express courier, out-of-state packaging, specific drop-off point..."
+                        value={otherFulfillmentSpecification}
+                        onChange={(e) => setOtherFulfillmentSpecification(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#E8DDD7] text-xs focus:outline-none focus:border-[#F50057] bg-white"
+                      />
+                    </div>
+                  )}
                 </div>
 
                 <div>
@@ -405,7 +490,24 @@ function EnquireContent() {
                     <option value="₦50,000 – ₦100,000">₦50,000 – ₦100,000 (Deluxe birthday cakes, celebratory platters)</option>
                     <option value="₦100,000 – ₦250,000">₦100,000 – ₦250,000 (Two-tier milestone cakes, event finger foods)</option>
                     <option value="₦250,000+">₦250,000+ (Multi-tier wedding centerpieces & grand catering)</option>
+                    <option value="other">Other / Custom Budget</option>
                   </select>
+
+                  {budget === "other" && (
+                    <div className="mt-2.5 p-3 rounded-xl bg-[#FFF9F5] border border-[#F50057]/30 animate-fade-in-up space-y-1">
+                      <label className="block text-[11px] font-bold text-[#351207]">
+                        Please tell us what you have in mind <span className="text-[#F50057]">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        placeholder="e.g., ₦350,000 corporate package or specific price limit..."
+                        value={otherBudgetSpecification}
+                        onChange={(e) => setOtherBudgetSpecification(e.target.value)}
+                        className="w-full px-3 py-2 rounded-lg border border-[#E8DDD7] text-xs focus:outline-none focus:border-[#F50057] bg-white"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
 

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { buildEventPlannerChatLink, buildWhatsAppLink } from "@/lib/whatsapp";
 import { BRAND } from "@/lib/constants";
+import { getMinOrderDate } from "@/lib/dates";
 
 export default function EventPlannersPage() {
   const [formData, setFormData] = useState({
@@ -29,6 +30,7 @@ export default function EventPlannersPage() {
     design_notes: "",
   });
 
+  const [otherEventSpecification, setOtherEventSpecification] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [successResult, setSuccessResult] = useState<{
     whatsappUrl: string;
@@ -40,8 +42,9 @@ export default function EventPlannersPage() {
     { id: "cakes", label: "Celebration & Multi-Tier Cakes" },
     { id: "dessert_table", label: "Dessert Table Treats (Cupcakes & Doughnuts)" },
     { id: "small_chops", label: "Savory Small Chops (Puff-Puff, Spring Rolls, Samosas)" },
-    { id: "pastries", label: "Party Pastries (Meat Pies & Sausage Rolls)" },
+    { id: "pastries", label: "Party Pastries (Meat Pies, Egg Rolls & Sausage Rolls)" },
     { id: "snack_jars", label: "Individual Snack Jars / Favor Packs" },
+    { id: "other", label: "Other Services / Bespoke Catering" },
   ];
 
   const handleCategoryToggle = (id: string) => {
@@ -59,13 +62,31 @@ export default function EventPlannersPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
+
+    if (formData.product_categories.includes("other") && !otherEventSpecification.trim()) {
+      setErrorMsg("Please specify what you have in mind for your other event services.");
+      return;
+    }
+
     setSubmitting(true);
+
+    const finalNotes = [
+      formData.design_notes,
+      formData.product_categories.includes("other") && otherEventSpecification.trim()
+        ? `Custom Specification: ${otherEventSpecification.trim()}`
+        : null,
+    ]
+      .filter(Boolean)
+      .join(" | ");
 
     try {
       const res = await fetch("/api/enquiries", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          ...formData,
+          design_notes: finalNotes || undefined,
+        }),
       });
 
       const data = await res.json();
@@ -98,13 +119,13 @@ export default function EventPlannersPage() {
             </div>
 
             <h1 className="font-serif font-black text-3xl sm:text-5xl text-[#351207]">
-              A Cake & Baking Partner for Your Events
+              Hamtunes Event Catering &amp; Cake Vendor Partnership
             </h1>
 
             <p className="text-base sm:text-lg text-[#6F625C] leading-relaxed">
               Elevate your clients&apos; weddings, milestone anniversaries, corporate banquets, and
-              celebrations with handcrafted cakes and freshly prepared savory small chops, backed by
-              16 years of consistent baking excellence.
+              celebrations with bespoke celebration cakes, custom dessert tables, and authentic savory small chops from
+              Hamtunes Cakes &amp; Bakes, backed by {BRAND.experienceYears} years of consistent baking excellence in Lagos.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
@@ -130,7 +151,7 @@ export default function EventPlannersPage() {
         </div>
       </section>
 
-      {/* 2. WHY PARTNER WITH HAMTUNES (16 Years Experience) */}
+      {/* 2. WHY PARTNER WITH HAMTUNES (Dynamic Experience) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto mb-10">
           <span className="text-xs font-bold uppercase tracking-widest text-[#F50057]">
@@ -151,7 +172,7 @@ export default function EventPlannersPage() {
               <ShieldCheck className="w-6 h-6" />
             </div>
             <h3 className="font-serif font-bold text-lg text-[#351207]">
-              16 Years of Proven Experience
+              {BRAND.experienceYears} Years of Proven Experience
             </h3>
             <p className="text-xs text-[#6F625C] leading-relaxed">
               We bring seasoned expertise handling large guest counts, complex multi-tier wedding
@@ -329,6 +350,22 @@ export default function EventPlannersPage() {
                     );
                   })}
                 </div>
+
+                {formData.product_categories.includes("other") && (
+                  <div className="mt-3 p-3.5 rounded-xl bg-[#FFF9F5] border border-[#F50057]/30 animate-fade-in-up space-y-1.5">
+                    <label className="block text-xs font-bold text-[#351207]">
+                      Please tell us what you have in mind <span className="text-[#F50057]">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      required
+                      placeholder="e.g., Dessert cups, custom favor packs, bespoke sweet & savory tables..."
+                      value={otherEventSpecification}
+                      onChange={(e) => setOtherEventSpecification(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg border border-[#E8DDD7] text-xs focus:outline-none focus:border-[#F50057] bg-white"
+                    />
+                  </div>
+                )}
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -338,6 +375,7 @@ export default function EventPlannersPage() {
                   </label>
                   <input
                     type="date"
+                    min={getMinOrderDate(2)}
                     value={formData.event_date}
                     onChange={(e) =>
                       setFormData({ ...formData, event_date: e.target.value })

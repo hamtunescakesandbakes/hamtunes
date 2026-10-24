@@ -14,6 +14,7 @@ import {
 } from "../db";
 import { classifyImage } from "./classifier";
 import { Asset, AssetStatus, Product, SyncLogEntry } from "../types";
+import { BRAND } from "../constants";
 
 export interface SyncEngineResult {
   success: boolean;
@@ -125,7 +126,12 @@ export async function runSync(trigger: "manual" | "watcher" | "initial_import" =
         const optPath = path.join(publicDir, existingAsset.web_url);
         if (!fs.existsSync(optPath)) {
           // Regenerate web image if missing
-          await generateOptimizedImages(filePath, hash, uploadsOptDir, uploadsThumbDir);
+          const cleanSlug = (existingAsset.caption || filename)
+            .replace(/\.[^/.]+$/, "")
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, "-")
+            .replace(/(^-|-$)/g, "");
+          await generateOptimizedImages(filePath, hash, uploadsOptDir, uploadsThumbDir, cleanSlug);
           files_updated++;
         }
         duplicates_skipped++;
@@ -138,12 +144,23 @@ export async function runSync(trigger: "manual" | "watcher" | "initial_import" =
       const height = imageInfo.height || 800;
       const stat = fs.statSync(filePath);
 
-      // Generate optimized WebP web version & thumbnail
+      // Classify the image first for SEO naming & metadata
+      const classification = classifyImage(filename, parentFolder);
+      const isFeatured = parentFolder.toLowerCase().includes("featured");
+
+      const cleanSlug = (classification.caption || filename)
+        .replace(/\.[^/.]+$/, "")
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/(^-|-$)/g, "");
+
+      // Generate optimized WebP web version & thumbnail with descriptive SEO filename
       const { webUrl, thumbUrl } = await generateOptimizedImages(
         filePath,
         hash,
         uploadsOptDir,
-        uploadsThumbDir
+        uploadsThumbDir,
+        cleanSlug
       );
 
       // Handle brand assets for static UI
@@ -152,10 +169,6 @@ export async function runSync(trigger: "manual" | "watcher" | "initial_import" =
       } else if (parentFolder.toLowerCase().includes("brand photography") || filename.toLowerCase().includes("owner")) {
         fs.copyFileSync(filePath, path.join(brandImgDir, "owner.jpg"));
       }
-
-      // Classify the image
-      const classification = classifyImage(filename, parentFolder);
-      const isFeatured = parentFolder.toLowerCase().includes("featured");
 
       let status: AssetStatus = "needs_review";
       if (classification.is_brand_asset) {
@@ -244,10 +257,12 @@ async function generateOptimizedImages(
   srcPath: string,
   hash: string,
   optDir: string,
-  thumbDir: string
+  thumbDir: string,
+  seoSlug?: string
 ): Promise<{ webUrl: string; thumbUrl: string }> {
-  const optFilename = `${hash}.webp`;
-  const thumbFilename = `${hash}_thumb.webp`;
+  const baseName = seoSlug ? `hamtunes-${seoSlug}-${hash.substring(0, 8)}` : hash;
+  const optFilename = `${baseName}.webp`;
+  const thumbFilename = `${baseName}_thumb.webp`;
 
   const optFullPath = path.join(optDir, optFilename);
   const thumbFullPath = path.join(thumbDir, thumbFilename);
@@ -257,6 +272,16 @@ async function generateOptimizedImages(
     .resize(1600, 1600, { fit: "inside", withoutEnlargement: true })
     .webp({ quality: 85 })
     .toFile(optFullPath);
+
+  // Also maintain legacy hash-only alias for backwards compatibility
+  if (baseName !== hash) {
+    const legacyOptPath = path.join(optDir, `${hash}.webp`);
+    if (!fs.existsSync(legacyOptPath)) {
+      try {
+        fs.copyFileSync(optFullPath, legacyOptPath);
+      } catch (_) {}
+    }
+  }
 
   // Thumbnail: 500x500 square or cropped fit, WebP, quality 80
   await sharp(srcPath)
@@ -301,7 +326,7 @@ function syncProductForAsset(asset: Asset) {
       slug,
       division: isCake ? "cakes" : "bakes_and_small_chops",
       category: asset.category,
-      description: `${asset.caption} handcrafted with precision, passion, and 16 years of Hamtunes baking expertise. Available for custom orders and events.`,
+      description: `${asset.caption} handcrafted with precision, passion, and ${BRAND.experienceYears} of Hamtunes baking expertise. Available for custom orders and events.`,
       primary_image_id: asset.id,
       primary_image_url: asset.web_url,
       gallery_images: [asset.web_url],

@@ -1,9 +1,17 @@
+import { getBakingExperience, DEFAULT_BUSINESS_START_DATE } from "./dates";
+
+export const SITE_URL = "https://hamtunes.vercel.app";
+
+const exp = getBakingExperience();
+
 export const BRAND = {
   name: "Hamtunes Cakes & Bakes",
   legalName: "Hamtunes Cakes & Bakes",
   tagline: "Beautiful Cakes. Delicious Bakes. Made for Your Moments.",
-  experienceYears: 16,
-  foundedYear: 2010, // 16 years of baking experience
+  siteUrl: SITE_URL,
+  experienceYears: exp.years,
+  experienceLabel: exp.experienceLabel,
+  businessStartDate: DEFAULT_BUSINESS_START_DATE,
   phoneDisplay: "0904 957 1104",
   phoneTel: "tel:09049571104",
   whatsAppDisplay: "+234 803 397 6589",
@@ -40,6 +48,7 @@ export const CAKE_CATEGORIES = [
   { id: "gifting_cakes", label: "Cakes for Gifting", description: "Thoughtful mini and bento cakes personalized for friends, partners, and colleagues." },
   { id: "cultural_cakes", label: "Cultural Celebration Cakes", description: "Traditional wedding, introduction, and heritage celebration designs." },
   { id: "custom_cakes", label: "Custom & Special Occasion Cakes", description: "Weddings, anniversaries, graduations, and tailored conceptual centerpieces." },
+  { id: "other", label: "Other Custom Cakes", description: "Bespoke creations, unique dietary needs, and tailored celebratory centerpieces." },
 ];
 
 export const BAKES_CATEGORIES = [
@@ -47,9 +56,11 @@ export const BAKES_CATEGORIES = [
   { id: "doughnuts", label: "Doughnuts", description: "Fluffy, glazed, sugar-dusted, and sprinkle-topped fresh doughnuts." },
   { id: "cupcakes", label: "Cupcakes", description: "Artisan decorated cupcakes with whipped buttercream and fondant toppers." },
   { id: "meat_pies", label: "Meat Pies & Hand Pies", description: "Flaky golden pastry filled with richly seasoned beef and savory potatoes." },
+  { id: "egg_rolls", label: "Nigerian Egg Rolls", description: "Crisp, golden-brown fried pastry wrapped around seasoned whole boiled eggs." },
   { id: "sausage_rolls", label: "Sausage Rolls", description: "Crisp, golden puff pastry with spiced, juicy sausage filling." },
   { id: "small_chops", label: "Small Chops & Finger Foods", description: "Authentic Nigerian party favorites, puff-puff, spring rolls, samosas, and savory platters." },
   { id: "party_bulk", label: "Party & Bulk Orders", description: "Catered snack trays, gift boxes, and bulk pastries for gatherings and events." },
+  { id: "other", label: "Other Baked Treats", description: "Custom pastries, savory snacks, and specialty catering arrangements." },
 ];
 
 export const OCCASIONS = [
@@ -59,4 +70,5 @@ export const OCCASIONS = [
   { id: "baked_treats", title: "Want Fresh Baked Treats", division: "bakes_and_small_chops", category: "doughnuts", icon: "Coffee" },
   { id: "small_chops", title: "Need Party Small Chops", division: "bakes_and_small_chops", category: "small_chops", icon: "PartyPopper" },
   { id: "custom", title: "I Have a Custom Design", division: "cakes", category: "custom_cakes", icon: "Sparkles" },
+  { id: "other", title: "Other Special Occasion", division: "both", category: "other", icon: "HelpCircle" },
 ];

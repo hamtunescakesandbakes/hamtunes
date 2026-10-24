@@ -5,6 +5,7 @@ import { MessageCircle, Phone, Mail, Sparkles, Heart } from "lucide-react";
 import { InstagramIcon } from "@/components/icons/InstagramIcon";
 import { BRAND } from "@/lib/constants";
 import { buildGeneralChatLink } from "@/lib/whatsapp";
+import { getCopyrightNotice } from "@/lib/dates";
 
 export default function Footer() {
   const whatsAppUrl = buildGeneralChatLink();
@@ -13,13 +14,13 @@ export default function Footer() {
     <footer className="bg-[#351207] text-[#FFF9F5] border-t-4 border-[#F50057]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
-          {/* Col 1: Brand & 16-Year Badge */}
+          {/* Col 1: Brand & Dynamic Experience Badge */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#F50057] bg-white">
                 <Image
                   src="/images/logo.png"
-                  alt="Hamtunes Logo"
+                  alt="Hamtunes Cakes & Bakes Official Logo"
                   fill
                   className="object-cover"
                 />
@@ -34,12 +35,12 @@ export default function Footer() {
 
             <p className="text-sm text-[#F7EFE8]/80 leading-relaxed">
               Handcrafting bespoke celebration cakes, thoughtful gifting cakes, fresh pastries,
-              and authentic Nigerian small chops with 16 years of baking mastery.
+              and authentic Nigerian small chops with {BRAND.experienceYears} years of baking mastery.
             </p>
 
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#5A2718] border border-[#E8DDD7]/20 text-xs font-semibold text-[#FFF9F5]">
               <Sparkles className="w-3.5 h-3.5 text-[#F50057]" />
-              <span>16 Years of Baking Excellence</span>
+              <span>{BRAND.experienceYears} Years of Baking Excellence</span>
             </div>
           </div>
 
@@ -221,9 +222,9 @@ export default function Footer() {
 
         {/* Bottom copyright line */}
         <div className="mt-12 pt-8 border-t border-[#5A2718] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#F7EFE8]/60">
-          <p>© {new Date().getFullYear()} Hamtunes Cakes & Bakes. All rights reserved.</p>
+          <p>{getCopyrightNotice()}</p>
           <p className="flex items-center gap-1">
-            Crafted with <Heart className="w-3.5 h-3.5 text-[#F50057] fill-[#F50057]" /> for 16 years of celebrations across Nigeria.
+            Crafted with <Heart className="w-3.5 h-3.5 text-[#F50057] fill-[#F50057]" /> for {BRAND.experienceYears} years of celebrations across Nigeria.
           </p>
         </div>
       </div>
